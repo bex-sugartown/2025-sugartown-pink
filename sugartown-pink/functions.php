@@ -58,6 +58,8 @@ if ( ! function_exists( 'sugartown_pink_enqueue_styles' ) ) :
 	}
 endif;
 add_action( 'wp_enqueue_scripts', 'sugartown_pink_enqueue_styles' );
+// ✨ FIX: Force the Editor to read the same file
+add_action( 'enqueue_block_editor_assets', 'sugartown_pink_enqueue_styles' );
 
 // Registers custom block styles.
 if ( ! function_exists( 'sugartown_pink_block_styles' ) ) :
@@ -199,3 +201,45 @@ function register_sugartown_case_studies() {
     register_post_type( 'case_study', $args );
 }
 add_action( 'init', 'register_sugartown_case_studies' );
+
+/**
+ * Register the 'gem' Custom Post Type
+ * For the Headless Content Store.
+ */
+function register_sugartown_gems() {
+    $labels = array(
+        'name'                  => 'Gems',
+        'singular_name'         => 'Gem',
+        'menu_name'             => 'Gems',
+        'add_new'               => 'Add New',
+        'add_new_item'          => 'Add New Gem',
+        'edit_item'             => 'Edit Gem',
+        'new_item'              => 'New Gem',
+        'view_item'             => 'View Gem',
+        'all_items'             => 'All Gems',
+        'search_items'          => 'Search Gems',
+        'not_found'             => 'No gems found.',
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'gem' ), // The URL will be sugartown.io/gem/title
+        'capability_type'    => 'post',
+        'has_archive'        => true,
+        'hierarchical'       => false,
+        'menu_position'      => 6,
+        'menu_icon'          => 'dashicons-diamond', // 💎 Icon!
+        'taxonomies'         => array( 'category', 'post_tag' ), // Enables XML tags
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions' ),
+        'show_in_rest'       => true, // CRITICAL: Enables the REST API
+    );
+
+    register_post_type( 'gem', $args );
+}
+add_action( 'init', 'register_sugartown_gems' );
+
