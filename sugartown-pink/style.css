@@ -7,7 +7,7 @@ Description:
 Requires at least: 6.8
 Tested up to: 6.8
 Requires PHP: 7.2
-Version: 1.0
+Version: 1.2.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: sugartown-pink
@@ -114,4 +114,83 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
         overflow-x: auto; /* Adds scrollbar on phone instead of squishing */
         white-space: nowrap;
     }
+}
+/* =========================================
+   CODE BLOCK STYLING (v1.1.8 - The Perfect Fit)
+   ========================================= */
+
+/* 1. The Main Box (Wrapper) */
+.wp-block-code {
+    background-color: #1e1e1e !important;       /* Dark Background */
+    color: #f8f8f2 !important;                  /* Light Text */
+    
+    /* THE MATH FIX: Include padding in width calculation */
+    box-sizing: border-box !important;          
+    padding: 2rem !important;                   
+    
+    border-radius: 8px;
+    border-left: 4px solid var(--wp--preset--color--primary, #ff007f);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    
+    /* THE POSITION FIX: Center vertically & horizontally */
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    
+    /* THE CONSTRAINT FIX: Force it to match paragraph width exactly */
+    max-width: var(--wp--style--global--content-size) !important;
+    width: 100% !important;                     
+    
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* 2. The Inner Text (Reset) */
+.wp-block-code pre,
+.wp-block-code code {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow-x: auto !important;
+    white-space: pre !important;
+}
+
+
+
+
+/* Scrollbar Styling (Webkit only - Chrome/Safari) */
+.wp-block-code pre::-webkit-scrollbar {
+    height: 8px;
+}
+.wp-block-code pre::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+.wp-block-code pre::-webkit-scrollbar-thumb {
+    background: #444; 
+    border-radius: 4px;
+}
+
+/* =========================================
+   INLINE CODE STYLING (Subtle Tech v1.2.0)
+   ========================================= */
+
+:not(pre) > code {
+    /* Background: Cool Gray instead of Pink */
+    background-color: #f1f2f4 !important;
+    
+    /* Text: Deep Magenta (Readable, not Neon) */
+    color: #b91c68 !important;
+    
+    /* Structure */
+    padding: 0.2em 0.5em !important;
+    border-radius: 4px !important;
+    border: 1px solid #e1e3e6 !important; /* Subtle gray border */
+    
+    /* Font */
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 0.85em !important;
+    vertical-align: baseline;
 }

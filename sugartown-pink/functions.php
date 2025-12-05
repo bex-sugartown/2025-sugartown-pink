@@ -182,14 +182,18 @@ function register_sugartown_case_studies() {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'case-studies' ), // Standard URL slug
+        'rewrite'            => array( 'slug' => 'case-studies' ),
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => 5,
-        'menu_icon'          => 'dashicons-portfolio', // Nice portfolio icon
+        'menu_icon'          => 'dashicons-portfolio',
+        
+        // ✨ NEW: This line connects your XML tags to this post type
+        'taxonomies'         => array( 'category', 'post_tag' ), 
+        
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions' ),
-        'show_in_rest'       => true, // IMPORTANT: Enables the Block Editor (Gutenberg)
+        'show_in_rest'       => true,
     );
 
     register_post_type( 'case_study', $args );
