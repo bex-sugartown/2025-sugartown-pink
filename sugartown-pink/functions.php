@@ -243,3 +243,46 @@ function register_sugartown_gems() {
 }
 add_action( 'init', 'register_sugartown_gems' );
 
+/**
+ * Register Custom Meta Fields for Gems
+ * Allows Python to read/write these fields via REST API.
+ */
+function register_gem_meta_fields() {
+    $meta_fields = array(
+        'gem_status',
+        'gem_action_item',
+        'gem_related_project'
+    );
+
+    foreach ( $meta_fields as $field ) {
+        register_post_meta( 'gem', $field, array(
+            'show_in_rest' => true, // CRITICAL: Exposes to API
+            'single'       => true,
+            'type'         => 'string',
+            'auth_callback' => function() { return current_user_can( 'edit_posts' ); }
+        ) );
+    }
+}
+add_action( 'init', 'register_gem_meta_fields' );
+
+/**
+ * Enqueue Mermaid.js (v11)
+ * Upgraded to support "Neo" looks and Frontmatter config.
+ */
+function sugartown_enqueue_mermaid() {
+    // ✨ FIX: Bump to v11.3.0 to support 'look: neo'
+    wp_enqueue_script( 
+        'mermaid-js', 
+        'https://cdn.jsdelivr.net/npm/mermaid@11.3.0/dist/mermaid.min.js', 
+        array(), 
+        '11.3.0', 
+        true 
+    );
+
+    // Initialize (Keep it simple so Frontmatter can override it)
+    wp_add_inline_script( 
+        'mermaid-js', 
+        'mermaid.initialize({ startOnLoad: true });' 
+    );
+}
+add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_mermaid' );

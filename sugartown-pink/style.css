@@ -7,7 +7,7 @@ Description:
 Requires at least: 6.8
 Tested up to: 6.8
 Requires PHP: 7.2
-Version: 1.2.0
+Version: 1.2.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: sugartown-pink
@@ -219,4 +219,31 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(255, 0, 127, 0.2); /* Pink shadow on hover */
     border-color: var(--wp--preset--color--primary, #ff007f);
+}
+/* =========================================
+   MERMAID RESET (Kill the Terminal Style)
+   ========================================= */
+
+/* Target <pre> tags that contain Mermaid charts */
+pre.mermaid {
+    /* 1. Reset the "Terminal" look */
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+    
+    /* 2. Center the Chart */
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    overflow: visible !important; /* Let the chart breathe */
+}
+
+/* Ensure the text inside doesn't inherit code styles */
+pre.mermaid code, 
+pre.mermaid span {
+    font-family: var(--wp--preset--font-family--fira-sans) !important; /* Reset to body font */
+    background: none !important;
 }
