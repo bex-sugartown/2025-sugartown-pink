@@ -7,7 +7,7 @@ Description:
 Requires at least: 6.8
 Tested up to: 6.8
 Requires PHP: 7.2
-Version: 1.2.2
+Version: 1.3.6
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: sugartown-pink
@@ -195,31 +195,106 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     vertical-align: baseline;
 }
 
+
+
 /* =========================================
-   FEATURED IMAGE STYLING (The Product Frame)
+   FEATURED IMAGE: THE UNIVERSAL FIX (v5.1)
    ========================================= */
 
-/* Target images inside the Query Loop (Grid) */
-.wp-block-post-featured-image img {
-    /* 1. Standardize Size */
-    aspect-ratio: 16 / 9;        /* Force consistent shape */
-    object-fit: cover;           /* Crop to fit, don't stretch */
+/* 1. THE PARENT CONTAINER (The Source of Truth) */
+.wp-block-post-featured-image {
+    position: relative;
+    display: block;
+    overflow: hidden; /* Clips the corners perfectly */
+    isolation: isolate;
     
-    /* 2. The Frame */
-    border-radius: 8px;
-    border: 1px solid rgba(0,0,0,0.1);
+    /* Default Spacing */
+    margin-bottom: 3rem;
+    width: 100%;
     
-    /* 3. The Lift */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* DEFAULT SHAPE (Fall back to this if no specific context) */
+    aspect-ratio: 16 / 9;
+    border-radius: 16px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* Hover Effect: Lift up slightly */
-.wp-block-post-featured-image a:hover img {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(255, 0, 127, 0.2); /* Pink shadow on hover */
-    border-color: var(--wp--preset--color--primary, #ff007f);
+/* 2. THE CHILDREN (Force perfect alignment) */
+.wp-block-post-featured-image img,
+.wp-block-post-featured-image::after {
+    /* CRITICAL FIX: Always copy the parent's radius exactly */
+    border-radius: inherit !important; 
+    
+    display: block;
+    width: 100%;
+    height: 100%;
 }
+
+/* Image Styling */
+.wp-block-post-featured-image img {
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* The Sugartown Gradient Overlay */
+.wp-block-post-featured-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(135deg, rgba(254, 18, 149, 0.7), rgba(43, 212, 170, 0.6));
+    mix-blend-mode: hard-light;
+    pointer-events: none;
+}
+
+/* Hover Zoom */
+.wp-block-post-featured-image:hover img {
+    transform: scale(1.03);
+}
+
+/* =========================================
+   CONTEXT SWITCHING (Shape & Size)
+   ========================================= */
+
+/* A. SINGLE POSTS (The "Cinematic" Reader View) */
+body.single-post .wp-block-post-featured-image {
+    /* Shape: Wide Banner */
+    aspect-ratio: 21 / 9; 
+    
+    /* Edges: Smooth Modern Corners (Not a pill, not a circle) */
+    border-radius: 16px;  
+    
+    /* Layout: Breakout / Full Width Check */
+    max-width: 100%;
+    width: 100%;
+}
+
+/* B. ARCHIVES & CARDS (The "Grid" View) */
+body.blog .wp-block-post-featured-image,
+body.archive .wp-block-post-featured-image,
+body.search .wp-block-post-featured-image,
+.pink-card .wp-block-post-featured-image {
+    /* Shape: Standard Video Card */
+    aspect-ratio: 16 / 9;
+    
+    /* Edges: Matches the cards */
+    border-radius: 12px;
+    
+    /* Structure */
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* C. STATIC PAGES (The "Pill" Header) */
+/* Only applies to pages like Contact, About, etc. */
+body.page .wp-block-post-featured-image {
+    /* Shape: Ultra-wide Strip */
+    aspect-ratio: 3 / 1; 
+    
+    /* Edges: Full Pill (Semicircle ends) */
+    border-radius: 9999px; 
+}
+
+
 /* =========================================
    MERMAID RESET (Kill the Terminal Style)
    ========================================= */
@@ -247,3 +322,264 @@ pre.mermaid span {
     font-family: var(--wp--preset--font-family--fira-sans) !important; /* Reset to body font */
     background: none !important;
 }
+
+
+/* =========================================
+   MERMAID LAYOUT (v1.2.5 - Constrained)
+   ========================================= */
+
+pre.mermaid {
+    /* 1. The Container Cap */
+    max-width: 1000px !important;       /* Never get wider than this */
+    width: 90% !important;              /* Use most of the screen on smaller laptops */
+    
+    /* 2. Centering */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+    
+    /* 3. Breathing Room */
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    
+    /* 4. Reset Terminal Styles */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Ensure the SVG scales naturally inside the limit */
+pre.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Sugartown footer site title override */
+.wp-site-footer .wp-block-site-title,
+.wp-site-footer .wp-block-site-title a {
+  font-family: var(--wp--preset--font-family--playfair-display), "Playfair Display", serif !important;
+  font-weight: 400;
+  letter-spacing: 0;           /* optional – undo the tight tracking */
+  text-transform: none;        /* optional – remove forced uppercase */
+}
+
+/* =========================================
+   PINK CARD COMPONENT (v4.0 - Nested Flex Fix)
+   ========================================= */
+
+.pink-card {
+    /* Main Container Logic */
+    position: relative;
+    display: flex;          
+    flex-direction: column; /* Stack children vertically */
+    height: 100%;           /* Force card to fill the Grid column */
+    padding: 2rem;          
+    margin-bottom: 2rem;    
+    
+    /* Layering & Shape */
+    background-color: transparent !important; 
+    border: 1px solid #FE1295;            
+    border-radius: 8px;         
+    box-shadow: 0 4px 12px rgba(254, 18, 149, 0.05);
+    overflow: hidden;
+    isolation: isolate; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* The White Background (Layer -2) */
+.pink-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #ffffff; 
+    z-index: -2;
+}
+
+/* The Texture (Layer -1) */
+.pink-card__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.15 !important; 
+    filter: grayscale(100%); 
+    mix-blend-mode: multiply; 
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}
+
+.pink-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(254, 18, 149, 0.15);
+}
+
+/* --- INNER CONTENT WRAPPER --- */
+/* This is the key fix. We treat the inner content div 
+   as a flex column too, so it stretches to fill the card. */
+.pink-card__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Expands to fill available height */
+    width: 100%;
+}
+
+/* Typography */
+.pink-card__eyebrow {
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #FE1295;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.pink-card__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 0.5rem 0;
+    color: #1e1e1e;
+}
+
+.pink-card__subtitle {
+    font-family: var(--wp--preset--font-family--fira-sans, sans-serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #666;
+    margin: 0 0 1rem 0;
+}
+
+/* --- BODY TEXT (The Pusher) --- */
+.pink-card__body {
+    font-family: var(--wp--preset--font-family--fira-sans, sans-serif);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    
+    /* Push everything below this element to the bottom */
+    margin-bottom: auto !important; 
+    padding-bottom: 1.5rem; 
+}
+
+/* --- FOOTER ELEMENTS --- */
+.pink-card__citation {
+    display: block;
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0;
+    
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 0.7rem;
+    color: #888;
+    border-top: 1px dashed rgba(254, 18, 149, 0.3); /* The aligned separator */
+    font-style: normal;
+}
+
+.pink-card__citation a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- MEDIA (Bottom) --- */
+.pink-card__media {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; 
+    width: 100%;
+    min-height: 100px; /* Reserve space */
+}
+
+.pink-card__media img {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    outline: none !important;
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+}
+
+/* * NO DARK MODE BLOCK HERE 
+ * (Deleted to ensure cards stay white) 
+ */
+/* =========================================
+   GLOBAL SKILL TAGS (The "Tech Pill")
+   Applies to: Cards, Blog Tags, Categories, Gems
+   ========================================= */
+
+/* 1. The Tag Itself */
+.pink-card__tag,              /* Homepage Cards */
+.wp-block-post-terms a,       /* Native WP Tags/Categories */
+.taxonomy-category a,         /* Archive Links */
+.skill-tag                    /* Utility class for manual use */
+{
+    display: inline-block;
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace; /* The "Code" Font */
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none !important; /* Kill default underlines */
+    white-space: nowrap;              /* Don't break words */
+    
+    /* Light Mode (Subtle Tech) */
+    background-color: #f1f2f4;
+    color: #b91c68 !important;        /* Deep Pink Text */
+    border: 1px solid #e1e3e6;
+    border-radius: 4px;
+    
+    padding: 0.4em 0.7em;             /* The "Pill" Shape */
+    margin: 0 0.5rem 0.5rem 0;        /* Spacing between tags */
+    
+    transition: all 0.2s ease;
+}
+
+/* 2. Hover Effect (Interactive Pop) */
+.pink-card__tag:hover,
+.wp-block-post-terms a:hover,
+.skill-tag:hover {
+    background-color: rgba(254, 18, 149, 0.08);
+    border-color: #FE1295;
+    color: #FE1295 !important;
+    transform: translateY(-1px);
+}
+
+/* 3. The Container (Align in a Row) */
+.wp-block-post-terms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0; /* Margin handles the gap */
+}
+
+/* 4. Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .pink-card__tag,
+    .wp-block-post-terms a,
+    .skill-tag {
+        background: rgba(254, 18, 149, 0.1); 
+        color: #FE1295 !important;
+        border-color: rgba(254, 18, 149, 0.3);
+    }
+    
+    .pink-card__tag:hover,
+    .wp-block-post-terms a:hover {
+        background: rgba(254, 18, 149, 0.2);
+        border-color: #FE1295;
+    }
+}
+
+/* 5. RESUME EXCLUSION (Safety Net) */
+/* Ensure the resume page stays clean/white for printing */
+.page-slug-resume .skill-tag,
+.print-only .skill-tag {
+    background: none !important;
+    border: none !important;
+    color: #000 !important;
+    padding: 0 !important;
+}
+

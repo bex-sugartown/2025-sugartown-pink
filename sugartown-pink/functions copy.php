@@ -246,15 +246,12 @@ add_action( 'init', 'register_sugartown_gems' );
 /**
  * Register Custom Meta Fields for Gems
  * Allows Python to read/write these fields via REST API.
- * 
- * ✅ FIXED: Added 'gem_category' to the list
  */
 function register_gem_meta_fields() {
     $meta_fields = array(
         'gem_status',
         'gem_action_item',
-        'gem_related_project',
-        'gem_category'  // ✅ NEW: Now WordPress will accept this from Python
+        'gem_related_project'
     );
 
     foreach ( $meta_fields as $field ) {
@@ -269,7 +266,7 @@ function register_gem_meta_fields() {
 add_action( 'init', 'register_gem_meta_fields' );
 
 function sugartown_mermaid_shortcode( $atts, $content = '' ) {
-    // Don't escape content; Mermaid needs the raw syntax.
+    // Don’t escape content; Mermaid needs the raw syntax.
     $content = trim( $content );
     if ( empty( $content ) ) {
         return '';
@@ -332,7 +329,7 @@ add_action( 'init', function() {
     color: #0D1226;
     margin: 0;
   ">
-    <strong>"We will need 4–8 post-launch sprints dedicated solely to addressing tech debt, or the site will not scale."</strong>
+    <strong>“We will need 4–8 post-launch sprints dedicated solely to addressing tech debt, or the site will not scale.”</strong>
   </p>
 </div>
 <!-- /wp:html -->'
@@ -363,64 +360,10 @@ add_action( 'init', function() {
     color: #F8F8FA;
     margin: 0;
   ">
-    <strong>"We will need 4–8 post-launch sprints dedicated solely to addressing tech debt, or the site will not scale."</strong>
+    <strong>“We will need 4–8 post-launch sprints dedicated solely to addressing tech debt, or the site will not scale.”</strong>
   </p>
 </div>
 <!-- /wp:html -->'
         )
     );
 } );
-
-// ==========================================
-// GEM ARCHIVE ENHANCEMENTS
-// ==========================================
-
-/**
- * Enqueue gem archive styles (if using separate CSS file)
- * Only loads on the gem archive page for performance
- */
-function sugartown_enqueue_gem_archive_styles() {
-    if ( is_post_type_archive('gem') ) {
-        wp_enqueue_style(
-            'gem-archive-styles',
-            get_stylesheet_directory_uri() . '/assets/css/gem-archive-styles.css',
-            array('sugartown-pink-style'),
-            '1.0.0'
-        );
-    }
-}
-add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_gem_archive_styles' );
-
-/**
- * Enqueue gem archive filter JavaScript
- * Only loads on the gem archive page
- */
-function sugartown_enqueue_gem_archive_filter() {
-    if ( is_post_type_archive('gem') ) {
-        wp_enqueue_script(
-            'gem-archive-filter',
-            get_stylesheet_directory_uri() . '/assets/js/archive-gem-filter.js',
-            array(),
-            '1.0.0',
-            true // Load in footer
-        );
-    }
-}
-add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_gem_archive_filter' );
-
-/**
- * Helper function to get project name from project ID
- * This matches the project definitions in content_store.py
- * 
- * Update this array when you add new projects to content_store.py
- */
-function sugartown_get_project_name( $project_id ) {
-    $projects = array(
-        'PROJ-001' => 'Sugartown Headless CMS',
-        'PROJ-002' => 'The Resume Factory',
-        'PROJ-003' => 'Atomic Design System (Pink)',
-        'PROJ-004' => 'The Visualization Engine',
-    );
-    
-    return isset($projects[$project_id]) ? $projects[$project_id] : $project_id;
-}
