@@ -1,5 +1,9 @@
+/* Deprecated: styles moved into style.css to centralize theme styling.
+   File retained temporarily for safety/back-compat. */
+
+
 /* ================================================
-   GEM ARCHIVE STYLES
+   GEM ARCHIVE STYLES - v4 NEW LAYOUT
    Add to: style.css (after existing styles)
    ================================================ */
 
@@ -27,41 +31,126 @@
     font-style: italic;
 }
 
-/* Gem Grid */
+/* ================================================
+   FILTER ACTIVE NOTICE
+   ================================================ */
+
+.filter-active-notice {
+    background: #F8F8FA;
+    border-left: 4px solid #FF69B4;
+    padding: 20px 30px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.filter-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FF69B4;
+}
+
+.clear-filter {
+    margin-left: auto;
+    padding: 6px 16px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.clear-filter:hover {
+    background: #FF69B4;
+    color: #FFF;
+    border-color: #FF69B4;
+}
+
+/* ================================================
+   GEM GRID
+   ================================================ */
+
 .gem-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 30px;
     margin-bottom: 40px;
 }
 
-/* Individual Gem Card */
+/* ================================================
+   GEM CARD - NEW LAYOUT
+   ================================================ */
+
 .gem-card {
     background: #FFFFFF;
     border: 1px solid #E5E5E5;
     border-radius: 8px;
-    padding: 24px;
-    position: relative;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
     transition: all 0.2s ease;
 }
 
 .gem-card:hover {
-    border-color: #FF69B4; /* Sugartown Pink */
+    border-color: #FF69B4;
     box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
     transform: translateY(-2px);
 }
 
-/* Status Badge (Top Right) */
+/* ================================================
+   CARD HEADER - Title + Status Badge on same line
+   ================================================ */
+
+.gem-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.gem-title {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    margin: 0;
+    flex: 1;
+}
+
+.gem-title a {
+    color: #0D1226;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.gem-title a:hover {
+    color: #FF69B4;
+}
+
+/* Status Badge */
 .gem-status {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    padding: 4px 12px;
+    flex-shrink: 0;
+    padding: 4px 10px;
     border-radius: 12px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .status-green {
@@ -94,129 +183,123 @@
     color: #CC5500;
 }
 
-/* Gem Title */
-.gem-title {
-    font-size: 1.25rem;
-    line-height: 1.4;
-    margin: 0 40px 16px 0; /* Right margin for status badge */
-}
+/* ================================================
+   CARD BODY - Metadata rows (aligned to top)
+   ================================================ */
 
-.gem-title a {
-    color: #0D1226;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.gem-title a:hover {
-    color: #FF69B4; /* Sugartown Pink */
-}
-
-/* Project Info (NEW) */
-.gem-project {
+.gem-card-body {
+    flex: 1; /* Push footer to bottom */
     display: flex;
-    align-items: center;
-    margin-bottom: 8px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gem-meta-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     font-size: 0.9rem;
+    line-height: 1.5;
 }
 
-.project-label {
-    font-weight: 600;
-    color: #666;
-    margin-right: 6px;
+/* Light gray labels for Project, Category, Tags, Next Step */
+.meta-label {
+    color: #999;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.project-link {
+/* Pink link for project */
+.meta-link {
     color: #FF69B4;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.2s;
 }
 
-.project-link:hover {
+.meta-link:hover {
     color: #E5007D;
     text-decoration: underline;
 }
 
-.project-name {
-    color: #333;
-    font-weight: 400;
-    margin-left: 4px;
+/* Badges container - wraps if needed */
+.meta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
 }
 
-.project-name::before {
-    content: '•';
-    margin: 0 6px;
-    color: #CCC;
-}
-
-/* Internal Category */
-.gem-category {
-    margin-bottom: 12px;
-}
-
-.category-link {
+/* Badge styling - same for gem category and WP categories */
+.meta-badge {
     display: inline-block;
-    padding: 4px 10px;
-    background: #F8F8FA;
+    padding: 3px 10px;
+    background: #E8E8E8;
     color: #555;
     text-decoration: none;
     font-size: 0.85rem;
     border-radius: 4px;
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
-.category-link:hover {
-    background: #FF69B4;
-    color: #FFF;
-}
-
-/* WordPress Categories & Tags */
-.gem-wp-categories,
-.gem-wp-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-
-.wp-cat-tag {
-    display: inline-block;
-    padding: 3px 8px;
-    background: #E8E8E8;
-    color: #555;
-    text-decoration: none;
-    font-size: 0.75rem;
-    border-radius: 3px;
-    transition: all 0.2s;
-}
-
-.wp-cat-tag:hover {
+.meta-badge:hover {
     background: #2BD4AA; /* Sugartown Green */
     color: #FFF;
 }
 
-.wp-cat-tag.tag {
+/* Tags get # prefix and slightly different style */
+.meta-badge.tag {
     background: #FFF;
     border: 1px solid #DDD;
+    color: #666;
 }
 
-.wp-cat-tag.tag:hover {
+.meta-badge.tag:hover {
     border-color: #2BD4AA;
     background: #2BD4AA;
     color: #FFF;
 }
 
-/* Date */
-.gem-date {
-    display: block;
-    font-size: 0.8rem;
-    color: #999;
-    margin-top: 12px;
+/* ================================================
+   CARD FOOTER - Next Step + Date (aligned to bottom)
+   ================================================ */
+
+.gem-card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
     padding-top: 12px;
     border-top: 1px solid #F0F0F0;
+    font-size: 0.85rem;
 }
 
-/* Responsive */
+.gem-next-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.next-step-text {
+    color: #555;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.gem-date {
+    color: #999;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
 @media (max-width: 768px) {
     .gem-grid {
         grid-template-columns: 1fr;
@@ -225,61 +308,40 @@
     .archive-header h1 {
         font-size: 2rem;
     }
+    
+    .filter-active-notice {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .clear-filter {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+    
+    .gem-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .gem-status {
+        align-self: flex-start;
+    }
+    
+    .gem-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .gem-date {
+        align-self: flex-end;
+    }
 }
 
 /* ================================================
-   ARCHIVE FILTERS (Optional - for Phase 2)
+   UTILITY - Hide filtered cards
    ================================================ */
 
-.archive-filters {
-    background: #F8F8FA;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.filter-group label {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.9rem;
-}
-
-.filter-group select {
-    padding: 6px 12px;
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    background: #FFF;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.filter-reset {
-    padding: 6px 16px;
-    background: #FF69B4;
-    color: #FFF;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-
-.filter-reset:hover {
-    background: #E5007D;
-}
-
-/* Hidden cards (when filtered) */
 .gem-card[data-filtered="hidden"] {
     display: none;
 }

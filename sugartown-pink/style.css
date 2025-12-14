@@ -583,3 +583,271 @@ pre.mermaid svg {
     padding: 0 !important;
 }
 
+/* =========================================
+   SUGARTOWN TOKENS (semantic layer)
+   ========================================= */
+
+:root {
+  /* Color tokens (map to WP presets when available) */
+  --st-color-accent: var(--wp--preset--color--primary, #FE1295);
+  --st-color-accent-soft: rgba(254, 18, 149, 0.08);
+  --st-color-text: #1e1e1e;
+  --st-color-muted: #666;
+  --st-color-border: rgba(0,0,0,0.08);
+  --st-color-surface: #fff;
+  --st-color-surface-alt: #f8f8fa;
+
+  /* Shape + shadow */
+  --st-radius-card: 8px;
+  --st-radius-pill: 9999px;
+  --st-shadow-card: 0 4px 12px rgba(254, 18, 149, 0.05);
+  --st-shadow-card-hover: 0 12px 30px rgba(254, 18, 149, 0.15);
+
+  /* Spacing */
+  --st-space-1: 0.5rem;
+  --st-space-2: 1rem;
+  --st-space-3: 1.5rem;
+  --st-space-4: 2rem;
+}
+
+/* =========================================
+   ST: CARD (shared layout spec)
+   Aliases: .pink-card, .gem-card
+   ========================================= */
+
+:is(.st-card, .pink-card, .gem-card) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+
+  border-radius: var(--st-radius-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Default “light” surface */
+:is(.st-card, .gem-card) {
+  background: var(--st-color-surface);
+  border: 1px solid var(--st-color-border);
+  padding: 20px; /* archive baseline */
+}
+
+/* Pink card keeps its existing look, but now shares the same structural rules */
+.pink-card {
+  padding: 2rem; /* homepage baseline */
+  background-color: transparent !important;
+  border: 1px solid var(--st-color-accent);
+  box-shadow: var(--st-shadow-card);
+}
+
+/* Pink-card background layer stays intact */
+.pink-card::before {
+  background-color: var(--st-color-surface);
+}
+
+/* Hover parity */
+:is(.st-card, .pink-card, .gem-card):hover {
+  transform: translateY(-3px);
+}
+
+.pink-card:hover {
+  box-shadow: var(--st-shadow-card-hover);
+}
+
+.gem-card:hover {
+  border-color: var(--st-color-accent);
+  box-shadow: 0 4px 12px rgba(254, 18, 149, 0.15);
+}
+
+/* Shared “content stretches, footer sticks” behavior */
+:is(.st-card__content, .pink-card__content, .gem-card-body) {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Shared “push to bottom” utility for body blocks */
+.u-push-bottom,
+.pink-card__body {
+  margin-bottom: auto !important;
+}
+
+/* =========================================
+   ST: GRID (shared archive/home grid behavior)
+   Aliases: .gem-grid
+   ========================================= */
+
+.st-grid,
+.gem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+}
+
+/* =========================================
+   ST: CALLOUT (unify filter notice + homepage callouts)
+   Aliases: .filter-active-notice
+   ========================================= */
+
+:is(.st-callout, .filter-active-notice) {
+  background: var(--st-color-surface-alt);
+  border-left: 4px solid var(--st-color-accent);
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.st-callout--soft {
+  background: rgba(254, 18, 149, 0.05);
+}
+
+/* Filter notice bits (keep existing classnames so nothing breaks) */
+.filter-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--st-color-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filter-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--st-color-accent);
+}
+
+.clear-filter {
+  margin-left: auto;
+  padding: 6px 16px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: var(--st-color-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.clear-filter:hover {
+  background: var(--st-color-accent);
+  color: #fff;
+  border-color: var(--st-color-accent);
+}
+
+/* =========================================
+   ARCHIVE HEADER (moved from gem-archive-styles.css)
+   ========================================= */
+
+.gem-archive {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.archive-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.archive-header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #0d1226;
+}
+
+.archive-header p {
+  font-size: 1.1rem;
+  color: var(--st-color-muted);
+  font-style: italic;
+}
+
+/* =========================================
+   ARCHIVE CARD INTERNALS (legacy selectors retained)
+   ========================================= */
+
+.gem-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.gem-title {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin: 0;
+  flex: 1;
+}
+
+.gem-title a {
+  color: #0d1226;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.gem-title a:hover {
+  color: var(--st-color-accent);
+}
+
+/* Status badge (legacy kept, could later become .st-badge) */
+.gem-status {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Card footer */
+.gem-card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  font-size: 0.85rem;
+}
+
+/* Responsive (moved + kept) */
+@media (max-width: 768px) {
+  .gem-grid {
+    grid-template-columns: 1fr;
+  }
+  .archive-header h1 {
+    font-size: 2rem;
+  }
+  .filter-active-notice {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .clear-filter {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+  .gem-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .gem-status {
+    align-self: flex-start;
+  }
+  .gem-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .gem-date {
+    align-self: flex-end;
+  }
+}
