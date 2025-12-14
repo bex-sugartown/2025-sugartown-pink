@@ -1,347 +1,195 @@
-/* Deprecated: styles moved into style.css to centralize theme styling.
-   File retained temporarily for safety/back-compat. */
+# Product Requirements Document (PRD)
+## Project 003: Sugartown Atomic Design System
 
+| Metadata | Details |
+| :--- | :--- |
+| **Version** | 1.2 (Semantic Convergence Update) |
+| **Status** | 🟡 In Progress |
+| **Owner** | Engineering & DX |
+| **Related Gems** | Gem: The Pre-Design System · Gem: Resume Factory · Gem: Knowledge Graph |
 
-/* ================================================
-   GEM ARCHIVE STYLES - v4 NEW LAYOUT
-   Add to: style.css (after existing styles)
-   ================================================ */
+---
 
-/* Archive Header */
-.gem-archive {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
+## 1. Executive Summary
 
-.archive-header {
-    text-align: center;
-    margin-bottom: 60px;
-}
+The **Sugartown Atomic Design System** is a governed, semantic UI system designed to support a composable, content-as-code portfolio.
 
-.archive-header h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    color: #0D1226;
-}
+It is not a visual kit.  
+It is an **agreement** between humans, AI agents, and code about how structure, meaning, and presentation relate.
 
-.archive-header p {
-    font-size: 1.1rem;
-    color: #666;
-    font-style: italic;
-}
+This update formalizes:
+- Semantic component naming
+- Centralized styling in `style.css`
+- Shared layout primitives (Cards, Grids, Callouts)
+- Variants instead of forks (Light, Dark, KG)
 
-/* ================================================
-   FILTER ACTIVE NOTICE
-   ================================================ */
+---
 
-.filter-active-notice {
-    background: #F8F8FA;
-    border-left: 4px solid #FF69B4;
-    padding: 20px 30px;
-    margin-bottom: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+## 2. Current State: The Pre-Design System
 
-.filter-label {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+Sugartown currently operates with:
+- Strong visual identity
+- Multiple valid but divergent implementations
+- CSS that “works” but does not scale
 
-.filter-value {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #FF69B4;
-}
+### 2.1 The Multi-Agent Drift Problem
 
-.clear-filter {
-    margin-left: auto;
-    padding: 6px 16px;
-    background: #FFF;
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    color: #666;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-}
+Multiple AI agents (and humans) have independently implemented similar UI components:
+- Pink Cards
+- Gem Archive Cards
+- Filter Notices
+- Editorial Callouts
 
-.clear-filter:hover {
-    background: #FF69B4;
-    color: #FFF;
-    border-color: #FF69B4;
-}
+These implementations are visually aligned but **semantically disconnected**.
 
-/* ================================================
-   GEM GRID
-   ================================================ */
+**Risk:**  
+Visual consistency without semantic consistency creates CSS debt and blocks safe theming.
 
-.gem-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
-}
+**Opportunity:**  
+Introduce a semantic component layer that reconciles existing implementations without breaking markup.
 
-/* ================================================
-   GEM CARD - NEW LAYOUT
-   ================================================ */
+---
 
-.gem-card {
-    background: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    min-height: 280px;
-    transition: all 0.2s ease;
-}
+## 3. Core Design Principles
 
-.gem-card:hover {
-    border-color: #FF69B4;
-    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
-    transform: translateY(-2px);
-}
+1. **Subtle Tech**  
+   Editorial typography for narrative, monospace for data.
 
-/* ================================================
-   CARD HEADER - Title + Status Badge on same line
-   ================================================ */
+2. **Duotone Reality**  
+   Images are always filtered to match the system palette.
 
-.gem-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #F0F0F0;
-}
+3. **Data Density**  
+   Information-rich layouts over marketing abstraction.
 
-.gem-title {
-    font-size: 1.2rem;
-    line-height: 1.4;
-    margin: 0;
-    flex: 1;
-}
+4. **Light Mode First**  
+   The system assumes a light canvas as the baseline.  
+   Dark Mode and Knowledge Graph views are variants, not defaults.
 
-.gem-title a {
-    color: #0D1226;
-    text-decoration: none;
-    transition: color 0.2s;
-}
+5. **Semantic First**  
+   Components must have durable semantic identities, not just visual styles.
 
-.gem-title a:hover {
-    color: #FF69B4;
-}
+6. **Variants, Not Forks**  
+   Light Mode, Dark Mode, and Knowledge Graph are variants of the same components.
 
-/* Status Badge */
-.gem-status {
-    flex-shrink: 0;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
+---
 
-.status-green {
-    background: #D4EDDA;
-    color: #155724;
-}
+## 4. Atomic Tokens (The DNA)
 
-.status-blue {
-    background: #D1ECF1;
-    color: #0C5460;
-}
+### 4.1 Color Tokens
 
-.status-yellow {
-    background: #FFF3CD;
-    color: #856404;
-}
+| Token | Value | Usage |
+|-----|------|------|
+| color.brand.primary | #FE1295 | Sugartown Pink |
+| color.brand.secondary | #00E5FF | Electric Cyan |
+| color.bg.surface | #FFFFFF | Primary surface (Light Mode) |
+| color.bg.void | #0D1226 | Dark / KG surfaces |
+| color.text.body | #1e1e1e | Body text on light |
+| color.text.inverse | #F8F8F2 | Text on dark |
 
-.status-gray {
-    background: #E2E3E5;
-    color: #383D41;
-}
+### 4.2 Elevation Tokens
 
-.status-purple {
-    background: #E7D4F5;
-    color: #5A2A7A;
-}
+- elevation.card.rest: 0 4px 12px rgba(254,18,149,0.05)
+- elevation.card.hover: 0 12px 30px rgba(254,18,149,0.15)
 
-.status-orange {
-    background: #FFE5CC;
-    color: #CC5500;
-}
+### 4.3 Layout Tokens
 
-/* ================================================
-   CARD BODY - Metadata rows (aligned to top)
-   ================================================ */
+| Token | Value | Usage |
+|-----|------|------|
+| layout.card.radius | 8px | All cards |
+| layout.card.padding.sm | 20px | Dense views |
+| layout.card.padding.lg | 32px | Editorial views |
+| layout.grid.min | 340px | Card grids |
+| layout.grid.gap | 30px | Grid spacing |
 
-.gem-card-body {
-    flex: 1; /* Push footer to bottom */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+---
 
-.gem-meta-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
+## 5. Component Library
 
-/* Light gray labels for Project, Category, Tags, Next Step */
-.meta-label {
-    color: #999;
-    font-weight: 500;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
+### 5.1 Card System (`.st-card`)
 
-/* Pink link for project */
-.meta-link {
-    color: #FF69B4;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s;
-}
+The **Card System** is the foundational organism across the site.
 
-.meta-link:hover {
-    color: #E5007D;
-    text-decoration: underline;
-}
+**Base Class:** `.st-card`  
+**Elements:**
+- `.st-card__header`
+- `.st-card__body`
+- `.st-card__meta`
+- `.st-card__footer`
 
-/* Badges container - wraps if needed */
-.meta-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-}
+**Variants:**
+- `.st-card--light` (default)
+- `.st-card--dark`
+- `.st-card--kg-dark`
 
-/* Badge styling - same for gem category and WP categories */
-.meta-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    background: #E8E8E8;
-    color: #555;
-    text-decoration: none;
-    font-size: 0.85rem;
-    border-radius: 4px;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
+**Behavioral Guarantees:**
+- Flex column layout
+- Sticky footer behavior
+- Grid alignment regardless of content length
 
-.meta-badge:hover {
-    background: #2BD4AA; /* Sugartown Green */
-    color: #FFF;
-}
+**Legacy Compatibility:**
+- `.pink-card` and `.gem-card` remain valid aliases
+- No breaking template changes permitted during convergence
 
-/* Tags get # prefix and slightly different style */
-.meta-badge.tag {
-    background: #FFF;
-    border: 1px solid #DDD;
-    color: #666;
-}
+---
 
-.meta-badge.tag:hover {
-    border-color: #2BD4AA;
-    background: #2BD4AA;
-    color: #FFF;
-}
+### 5.2 Callout System (`.st-callout`)
 
-/* ================================================
-   CARD FOOTER - Next Step + Date (aligned to bottom)
-   ================================================ */
+Used for:
+- Filter notices
+- Editorial asides
+- System annotations
 
-.gem-card-footer {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid #F0F0F0;
-    font-size: 0.85rem;
-}
+**Base Class:** `.st-callout`  
+**Variants:**
+- `.st-callout--info`
+- `.st-callout--soft`
+- `.st-callout--dark`
+- `.st-callout--kg-dark`
 
-.gem-next-step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+Legacy classes (e.g. `.filter-active-notice`) map to this system.
 
-.next-step-text {
-    color: #555;
-    font-style: italic;
-    line-height: 1.4;
-}
+---
 
-.gem-date {
-    color: #999;
-    white-space: nowrap;
-    font-size: 0.8rem;
-}
+### 5.3 Tag / Pill System (`.st-tag`)
 
-/* ================================================
-   RESPONSIVE
-   ================================================ */
+Used for:
+- Skills
+- Tags
+- Metadata
 
-@media (max-width: 768px) {
-    .gem-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .archive-header h1 {
-        font-size: 2rem;
-    }
-    
-    .filter-active-notice {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .clear-filter {
-        margin-left: 0;
-        align-self: flex-end;
-    }
-    
-    .gem-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .gem-status {
-        align-self: flex-start;
-    }
-    
-    .gem-card-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .gem-date {
-        align-self: flex-end;
-    }
-}
+**Rules:**
+- Single semantic pill component
+- Variants via modifiers only
+- No page-specific tag styling
 
-/* ================================================
-   UTILITY - Hide filtered cards
-   ================================================ */
+---
 
-.gem-card[data-filtered="hidden"] {
-    display: none;
-}
+## 6. Implementation Plan
+
+| Phase | Task | Deliverable | Status |
+|----|----|----|----|
+| 1 | Identify duplicate components | Component Drift Map | 🟡 |
+| 2 | Introduce `.st-*` semantic layer | Centralized style.css | 🟡 |
+| 3 | Migrate archive styles | Single stylesheet | 🟡 |
+| 4 | Define Dark/KG variants | Token + Variant spec | 🔴 |
+| 5 | Template cleanup | Non-breaking PRs | 🔴 |
+
+---
+
+## 7. Risks & Mitigations
+
+**AI Drift Risk:**  
+Future AI output may reintroduce divergent components.
+
+**Mitigation:**  
+Enforce `.st-*` vocabulary in prompts, reviews, and documentation.
+
+---
+
+## 8. Success Criteria
+
+- One card system
+- One callout system
+- One grid system
+- Zero visual regressions
+- Dark Mode implemented via modifiers only
