@@ -36,6 +36,7 @@ If a component does not work in Light Mode, it is broken.
 ## Component Vocabulary (Authoritative)
 
 ### Cards
+
 - `.st-card`
 - `.st-card__header`
 - `.st-card__body`
@@ -51,11 +52,12 @@ Allowed aliases:
 - `.pink-card`
 - `.gem-card`
 
-Do NOT invent new card classes.
+**Do NOT invent new card classes.**
 
 ---
 
 ### Callouts
+
 - `.st-callout`
 - `.st-callout--info`
 - `.st-callout--soft`
@@ -68,9 +70,10 @@ Allowed alias:
 ---
 
 ### Tags / Pills
+
 - `.st-tag` (or `.skill-tag` alias)
 
-Do NOT create page-specific pill styles.
+**Do NOT create page-specific pill styles.**
 
 ---
 
@@ -85,8 +88,8 @@ Do NOT create page-specific pill styles.
 
 ## Layout Rules
 
-- All cards must be `display:flex; flex-direction:column`
-- Footers must stick to bottom via layout, not magic numbers
+- All cards must be `display: flex; flex-direction: column`
+- Footers must stick to the bottom via layout, not magic numbers
 - Grids must use shared min/max rules
 
 ---
@@ -95,6 +98,39 @@ Do NOT create page-specific pill styles.
 
 Dark Mode is a **variant**, not a redesign.
 
-Correct:
+Correct usage:
+
 ```html
 <article class="st-card st-card--kg-dark">
+```
+
+Incorrect usage:
+
+```html
+<article class="kg-card">
+```
+
+---
+
+## AI Usage Policy
+
+When using AI to generate code:
+
+- Use `.st-*` classes by default
+- Do not invent new visual primitives
+- Prefer extending variants over creating new components
+
+AI output that violates semantic structure is considered **incorrect**, even if it “looks right.”
+
+---
+
+## Final Principle
+
+Sugartown is a **system**, not a page.
+
+If your code cannot survive:
+- A theme change
+- A new AI agent
+- A dark mode toggle
+
+…it does not belong in the system.
