@@ -1,27 +1,14 @@
 /*
 Theme Name: Sugartown Pink
-Theme URI: 
-Author: Bex
-Author URI: 
-Description: 
-Requires at least: 6.8
-Tested up to: 6.8
-Requires PHP: 7.2
-Version: 1.3.6
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: sugartown-pink
-Tags: one-column, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments, translation-ready, wide-blocks, block-styles, style-variations, accessibility-ready, blog, portfolio, news
+Theme URI: https://sugartown.io
+Author: Sugartown Digital
+Description: A minimalist theme for the Atomic Design System.
+Version: 3.3.0 (Full Restoration + Grid Fix)
+*/
 
-/*
- * Link styles
- * https://github.com/WordPress/gutenberg/issues/42319
- */
-
-/*
- * Link styles
- * https://github.com/WordPress/gutenberg/issues/42319
- */
+/* ==========================================================================
+   1. WORDPRESS CORE FIXES (Restored)
+   ========================================================================== */
 a {
 	text-decoration-thickness: 1px !important;
 	text-underline-offset: .1em;
@@ -33,563 +20,38 @@ a {
 	outline-style: solid;
 }
 
-/* Increase the bottom margin on submenus, so that the outline is visible. */
+/* Navigation Spacing Fixes */
 .wp-block-navigation .wp-block-navigation-submenu .wp-block-navigation-item:not(:last-child) {
 	margin-bottom: 3px;
 }
 
-/* Increase the outline offset on the parent menu items, so that the outline does not touch the text. */
 .wp-block-navigation .wp-block-navigation-item .wp-block-navigation-item__content {
 	outline-offset: 4px;
 }
 
-/* Remove outline offset from the submenus, otherwise the outline is visible outside the submenu container. */
 .wp-block-navigation .wp-block-navigation-item ul.wp-block-navigation__submenu-container .wp-block-navigation-item__content {
 	outline-offset: 0;
 }
 
-/*
- * Progressive enhancement to reduce widows and orphans
- * https://github.com/WordPress/gutenberg/issues/55190
- */
+/* Typography Resets */
 h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 	text-wrap: pretty;
 }
 
-/*
- * Change the position of the more block on the front, by making it a block level element.
- * https://github.com/WordPress/gutenberg/issues/65934
-*/
 .more-link {
 	display: block;
 }
 
-/* =========================================
-   GEM TABLE STYLING (Sugartown Pink)
-   ========================================= */
-
-/* Base Table Layout */
-.wp-block-table table {
-    border-collapse: collapse; /* Removes gaps between cells */
-    width: 100%;
-    margin: 2rem 0;
-    font-size: 0.9rem; /* Slightly smaller for density */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Subtle lift */
-}
-
-/* Cells (The fix for "running into each other") */
-.wp-block-table td, 
-.wp-block-table th {
-    padding: 12px 16px; /* Adds breathing room */
-    vertical-align: top; /* Aligns text to top */
-    line-height: 1.5;
-    word-wrap: break-word; /* Forces long words to wrap */
-}
-
-/* Headers (The Pink Pop) */
-.wp-block-table thead th {
-    background-color: var(--wp--preset--color--primary, #ff007f); /* Uses your Pink Variable */
-    color: #ffffff;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.8em;
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid #000;
-}
-
-/* Borders */
-.wp-block-table td {
-    border-bottom: 1px solid #eee;
-}
-
-/* Zebra Striping (Matches the 'is-style-stripes' class) */
-.wp-block-table.is-style-stripes tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-/* Mobile Responsiveness (Critical) */
-@media (max-width: 600px) {
-    .wp-block-table {
-        display: block;
-        overflow-x: auto; /* Adds scrollbar on phone instead of squishing */
-        white-space: nowrap;
-    }
-}
-/* =========================================
-   CODE BLOCK STYLING (v1.1.8 - The Perfect Fit)
-   ========================================= */
-
-/* 1. The Main Box (Wrapper) */
-.wp-block-code {
-    background-color: #1e1e1e !important;       /* Dark Background */
-    color: #f8f8f2 !important;                  /* Light Text */
-    
-    /* THE MATH FIX: Include padding in width calculation */
-    box-sizing: border-box !important;          
-    padding: 2rem !important;                   
-    
-    border-radius: 8px;
-    border-left: 4px solid var(--wp--preset--color--primary, #ff007f);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    
-    /* THE POSITION FIX: Center vertically & horizontally */
-    margin-top: 3rem !important;
-    margin-bottom: 3rem !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    
-    /* THE CONSTRAINT FIX: Force it to match paragraph width exactly */
-    max-width: var(--wp--style--global--content-size) !important;
-    width: 100% !important;                     
-    
-    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-/* 2. The Inner Text (Reset) */
-.wp-block-code pre,
-.wp-block-code code {
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    overflow-x: auto !important;
-    white-space: pre !important;
-}
-
-
-
-
-/* Scrollbar Styling (Webkit only - Chrome/Safari) */
-.wp-block-code pre::-webkit-scrollbar {
-    height: 8px;
-}
-.wp-block-code pre::-webkit-scrollbar-track {
-    background: #1e1e1e;
-}
-.wp-block-code pre::-webkit-scrollbar-thumb {
-    background: #444; 
-    border-radius: 4px;
-}
-
-/* =========================================
-   INLINE CODE STYLING (Subtle Tech v1.2.0)
-   ========================================= */
-
-:not(pre) > code {
-    /* Background: Cool Gray instead of Pink */
-    background-color: #f1f2f4 !important;
-    
-    /* Text: Deep Magenta (Readable, not Neon) */
-    color: #b91c68 !important;
-    
-    /* Structure */
-    padding: 0.2em 0.5em !important;
-    border-radius: 4px !important;
-    border: 1px solid #e1e3e6 !important; /* Subtle gray border */
-    
-    /* Font */
-    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
-    font-size: 0.85em !important;
-    vertical-align: baseline;
-}
-
-
-
-/* =========================================
-   FEATURED IMAGE: THE UNIVERSAL FIX (v5.1)
-   ========================================= */
-
-/* 1. THE PARENT CONTAINER (The Source of Truth) */
-.wp-block-post-featured-image {
-    position: relative;
-    display: block;
-    overflow: hidden; /* Clips the corners perfectly */
-    isolation: isolate;
-    
-    /* Default Spacing */
-    margin-bottom: 3rem;
-    width: 100%;
-    
-    /* DEFAULT SHAPE (Fall back to this if no specific context) */
-    aspect-ratio: 16 / 9;
-    border-radius: 16px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-/* 2. THE CHILDREN (Force perfect alignment) */
-.wp-block-post-featured-image img,
-.wp-block-post-featured-image::after {
-    /* CRITICAL FIX: Always copy the parent's radius exactly */
-    border-radius: inherit !important; 
-    
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* Image Styling */
-.wp-block-post-featured-image img {
-    object-fit: cover;
-    filter: grayscale(100%) contrast(1.1);
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-/* The Sugartown Gradient Overlay */
-.wp-block-post-featured-image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background: linear-gradient(135deg, rgba(254, 18, 149, 0.7), rgba(43, 212, 170, 0.6));
-    mix-blend-mode: hard-light;
-    pointer-events: none;
-}
-
-/* Hover Zoom */
-.wp-block-post-featured-image:hover img {
-    transform: scale(1.03);
-}
-
-/* =========================================
-   CONTEXT SWITCHING (Shape & Size)
-   ========================================= */
-
-/* A. SINGLE POSTS (The "Cinematic" Reader View) */
-body.single-post .wp-block-post-featured-image {
-    /* Shape: Wide Banner */
-    aspect-ratio: 21 / 9; 
-    
-    /* Edges: Smooth Modern Corners (Not a pill, not a circle) */
-    border-radius: 16px;  
-    
-    /* Layout: Breakout / Full Width Check */
-    max-width: 100%;
-    width: 100%;
-}
-
-/* B. ARCHIVES & CARDS (The "Grid" View) */
-body.blog .wp-block-post-featured-image,
-body.archive .wp-block-post-featured-image,
-body.search .wp-block-post-featured-image,
-.pink-card .wp-block-post-featured-image {
-    /* Shape: Standard Video Card */
-    aspect-ratio: 16 / 9;
-    
-    /* Edges: Matches the cards */
-    border-radius: 12px;
-    
-    /* Structure */
-    border: 1px solid rgba(0,0,0,0.05);
-}
-
-/* C. STATIC PAGES (The "Pill" Header) */
-/* Only applies to pages like Contact, About, etc. */
-body.page .wp-block-post-featured-image {
-    /* Shape: Ultra-wide Strip */
-    aspect-ratio: 3 / 1; 
-    
-    /* Edges: Full Pill (Semicircle ends) */
-    border-radius: 9999px; 
-}
-
-
-/* =========================================
-   MERMAID RESET (Kill the Terminal Style)
-   ========================================= */
-
-/* Target <pre> tags that contain Mermaid charts */
-pre.mermaid {
-    /* 1. Reset the "Terminal" look */
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin-top: 2rem !important;
-    margin-bottom: 2rem !important;
-    
-    /* 2. Center the Chart */
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-    overflow: visible !important; /* Let the chart breathe */
-}
-
-/* Ensure the text inside doesn't inherit code styles */
-pre.mermaid code, 
-pre.mermaid span {
-    font-family: var(--wp--preset--font-family--fira-sans) !important; /* Reset to body font */
-    background: none !important;
-}
-
-
-/* =========================================
-   MERMAID LAYOUT (v1.2.5 - Constrained)
-   ========================================= */
-
-pre.mermaid {
-    /* 1. The Container Cap */
-    max-width: 1000px !important;       /* Never get wider than this */
-    width: 90% !important;              /* Use most of the screen on smaller laptops */
-    
-    /* 2. Centering */
-    margin-left: auto !important;
-    margin-right: auto !important;
-    display: block !important;
-    
-    /* 3. Breathing Room */
-    margin-top: 3rem !important;
-    margin-bottom: 3rem !important;
-    
-    /* 4. Reset Terminal Styles */
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-}
-
-/* Ensure the SVG scales naturally inside the limit */
-pre.mermaid svg {
-    max-width: 100% !important;
-    height: auto !important;
-}
-
-/* Sugartown footer site title override */
-.wp-site-footer .wp-block-site-title,
-.wp-site-footer .wp-block-site-title a {
-  font-family: var(--wp--preset--font-family--playfair-display), "Playfair Display", serif !important;
-  font-weight: 400;
-  letter-spacing: 0;           /* optional – undo the tight tracking */
-  text-transform: none;        /* optional – remove forced uppercase */
-}
-
-/* =========================================
-   PINK CARD COMPONENT (v4.0 - Nested Flex Fix)
-   ========================================= */
-
-.pink-card {
-    /* Main Container Logic */
-    position: relative;
-    display: flex;          
-    flex-direction: column; /* Stack children vertically */
-    height: 100%;           /* Force card to fill the Grid column */
-    padding: 2rem;          
-    margin-bottom: 2rem;    
-    
-    /* Layering & Shape */
-    background-color: transparent !important; 
-    border: 1px solid #FE1295;            
-    border-radius: 8px;         
-    box-shadow: 0 4px 12px rgba(254, 18, 149, 0.05);
-    overflow: hidden;
-    isolation: isolate; 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* The White Background (Layer -2) */
-.pink-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: #ffffff; 
-    z-index: -2;
-}
-
-/* The Texture (Layer -1) */
-.pink-card__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.15 !important; 
-    filter: grayscale(100%); 
-    mix-blend-mode: multiply; 
-    background-size: cover;
-    background-position: center;
-    pointer-events: none;
-}
-
-.pink-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(254, 18, 149, 0.15);
-}
-
-/* --- INNER CONTENT WRAPPER --- */
-/* This is the key fix. We treat the inner content div 
-   as a flex column too, so it stretches to fill the card. */
-.pink-card__content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Expands to fill available height */
-    width: 100%;
-}
-
-/* Typography */
-.pink-card__eyebrow {
-    font-family: 'Menlo', 'Monaco', monospace;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #FE1295;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    display: block;
-}
-
-.pink-card__title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 0 0 0.5rem 0;
-    color: #1e1e1e;
-}
-
-.pink-card__subtitle {
-    font-family: var(--wp--preset--font-family--fira-sans, sans-serif);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: #666;
-    margin: 0 0 1rem 0;
-}
-
-/* --- BODY TEXT (The Pusher) --- */
-.pink-card__body {
-    font-family: var(--wp--preset--font-family--fira-sans, sans-serif);
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #333;
-    
-    /* Push everything below this element to the bottom */
-    margin-bottom: auto !important; 
-    padding-bottom: 1.5rem; 
-}
-
-/* --- FOOTER ELEMENTS --- */
-.pink-card__citation {
-    display: block;
-    width: 100%;
-    padding-top: 0.75rem;
-    margin-top: 0;
-    
-    font-family: 'Menlo', 'Monaco', monospace;
-    font-size: 0.7rem;
-    color: #888;
-    border-top: 1px dashed rgba(254, 18, 149, 0.3); /* The aligned separator */
-    font-style: normal;
-}
-
-.pink-card__citation a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* --- MEDIA (Bottom) --- */
-.pink-card__media {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end; 
-    width: 100%;
-    min-height: 100px; /* Reserve space */
-}
-
-.pink-card__media img {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    outline: none !important;
-    max-width: 100%;
-    height: auto;
-    max-height: 120px;
-}
-
-/* * NO DARK MODE BLOCK HERE 
- * (Deleted to ensure cards stay white) 
- */
-/* =========================================
-   GLOBAL SKILL TAGS (The "Tech Pill")
-   Applies to: Cards, Blog Tags, Categories, Gems
-   ========================================= */
-
-/* 1. The Tag Itself */
-.pink-card__tag,              /* Homepage Cards */
-.wp-block-post-terms a,       /* Native WP Tags/Categories */
-.taxonomy-category a,         /* Archive Links */
-.skill-tag                    /* Utility class for manual use */
-{
-    display: inline-block;
-    font-family: 'Menlo', 'Monaco', 'Consolas', monospace; /* The "Code" Font */
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1;
-    text-decoration: none !important; /* Kill default underlines */
-    white-space: nowrap;              /* Don't break words */
-    
-    /* Light Mode (Subtle Tech) */
-    background-color: #f1f2f4;
-    color: #b91c68 !important;        /* Deep Pink Text */
-    border: 1px solid #e1e3e6;
-    border-radius: 4px;
-    
-    padding: 0.4em 0.7em;             /* The "Pill" Shape */
-    margin: 0 0.5rem 0.5rem 0;        /* Spacing between tags */
-    
-    transition: all 0.2s ease;
-}
-
-/* 2. Hover Effect (Interactive Pop) */
-.pink-card__tag:hover,
-.wp-block-post-terms a:hover,
-.skill-tag:hover {
-    background-color: rgba(254, 18, 149, 0.08);
-    border-color: #FE1295;
-    color: #FE1295 !important;
-    transform: translateY(-1px);
-}
-
-/* 3. The Container (Align in a Row) */
-.wp-block-post-terms {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0; /* Margin handles the gap */
-}
-
-/* 4. Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .pink-card__tag,
-    .wp-block-post-terms a,
-    .skill-tag {
-        background: rgba(254, 18, 149, 0.1); 
-        color: #FE1295 !important;
-        border-color: rgba(254, 18, 149, 0.3);
-    }
-    
-    .pink-card__tag:hover,
-    .wp-block-post-terms a:hover {
-        background: rgba(254, 18, 149, 0.2);
-        border-color: #FE1295;
-    }
-}
-
-/* 5. RESUME EXCLUSION (Safety Net) */
-/* Ensure the resume page stays clean/white for printing */
-.page-slug-resume .skill-tag,
-.print-only .skill-tag {
-    background: none !important;
-    border: none !important;
-    color: #000 !important;
-    padding: 0 !important;
-}
-
-/* =========================================
-   SUGARTOWN TOKENS (semantic layer)
-   ========================================= */
-
+/* ==========================================================================
+   2. SUGARTOWN TOKENS (Restored)
+   ========================================================================== */
 :root {
-  /* Color tokens (map to WP presets when available) */
-  --st-color-accent: var(--wp--preset--color--primary, #FE1295);
+  /* Brand Colors */
+  --wp--preset--color--brand-primary: #FE1295;
+  --wp--preset--color--bg-void: #0D1226;
+  
+  /* Semantic Tokens */
+  --st-color-accent: var(--wp--preset--color--brand-primary);
   --st-color-accent-soft: rgba(254, 18, 149, 0.08);
   --st-color-text: #1e1e1e;
   --st-color-muted: #666;
@@ -597,257 +59,326 @@ pre.mermaid svg {
   --st-color-surface: #fff;
   --st-color-surface-alt: #f8f8fa;
 
-  /* Shape + shadow */
-  --st-radius-card: 8px;
-  --st-radius-pill: 9999px;
+  /* Dimensions */
+  --st-radius-card: 12px;
   --st-shadow-card: 0 4px 12px rgba(254, 18, 149, 0.05);
-  --st-shadow-card-hover: 0 12px 30px rgba(254, 18, 149, 0.15);
-
-  /* Spacing */
-  --st-space-1: 0.5rem;
-  --st-space-2: 1rem;
-  --st-space-3: 1.5rem;
-  --st-space-4: 2rem;
+  --wp--style--global--content-size: 800px;
 }
 
-/* =========================================
-   ST: CARD (shared layout spec)
-   Aliases: .pink-card, .gem-card
-   ========================================= */
+/* ==========================================================================
+   3. GLOBAL COMPONENTS (Tables, Code, Buttons)
+   ========================================================================== */
 
-:is(.st-card, .pink-card, .gem-card) {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  isolation: isolate;
-
-  border-radius: var(--st-radius-card);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+/* Zebra Tables */
+.wp-block-table table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 2rem 0;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.wp-block-table td, .wp-block-table th {
+    padding: 12px 16px;
+    vertical-align: top;
+    border-bottom: 1px solid #eee;
+    word-wrap: break-word;
+}
+.wp-block-table thead th {
+    background-color: var(--st-color-accent);
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    border-bottom: 2px solid #000;
+}
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+@media (max-width: 600px) {
+    .wp-block-table { display: block; overflow-x: auto; white-space: nowrap; }
 }
 
-/* Default “light” surface */
-:is(.st-card, .gem-card) {
-  background: var(--st-color-surface);
-  border: 1px solid var(--st-color-border);
-  padding: 20px; /* archive baseline */
+/* Code Blocks */
+.wp-block-code {
+    background-color: #1e1e1e !important;
+    color: #f8f8f2 !important;
+    box-sizing: border-box !important;
+    padding: 2rem !important;
+    border-radius: 8px;
+    border-left: 4px solid var(--st-color-accent);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin: 3rem auto !important;
+    width: 100% !important;
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 0.9rem;
 }
 
-/* Pink card keeps its existing look, but now shares the same structural rules */
+/* Inline Code */
+:not(pre) > code {
+    background-color: #f1f2f4 !important;
+    color: #b91c68 !important;
+    padding: 0.2em 0.5em !important;
+    border-radius: 4px !important;
+    border: 1px solid #e1e3e6 !important;
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 0.85em !important;
+}
+
+/* Buttons */
+.wp-block-button__link {
+    border-radius: 4px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    background-color: var(--st-color-accent) !important;
+    color: #fff !important;
+}
+.wp-block-button__link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(254, 18, 149, 0.3);
+}
+
+/* ==========================================================================
+   4. COMPONENT: THE PINK CARD (v3.2 Fixed Logic)
+   * This replaces the old broken block from backup *
+   ========================================================================== */
+
+/* 4.1 RESPONSIVE GRID WRAPPER */
+.st-grid-wrapper {
+    display: grid;
+    /* FIX: auto-fill + minmax prevents collapse */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    margin-bottom: 3rem;
+    align-items: stretch;
+}
+
+/* 4.2 CARD CONTAINER */
 .pink-card {
-  padding: 2rem; /* homepage baseline */
-  background-color: transparent !important;
-  border: 1px solid var(--st-color-accent);
-  box-shadow: var(--st-shadow-card);
-}
-
-/* Pink-card background layer stays intact */
-.pink-card::before {
-  background-color: var(--st-color-surface);
-}
-
-/* Hover parity */
-:is(.st-card, .pink-card, .gem-card):hover {
-  transform: translateY(-3px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 450px;
+    
+    /* OVERLAP FIX: Include padding in width calculation */
+    width: 100%; 
+    box-sizing: border-box !important; 
+    
+    background-color: #fff;
+    border: 1px solid var(--st-color-accent);
+    border-radius: 12px;
+    padding: 2rem;
+    
+    overflow: hidden;
+    isolation: isolate; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pink-card:hover {
-  box-shadow: var(--st-shadow-card-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(254, 18, 149, 0.15);
 }
 
-.gem-card:hover {
-  border-color: var(--st-color-accent);
-  box-shadow: 0 4px 12px rgba(254, 18, 149, 0.15);
+/* 4.3 BACKGROUND TEXTURE */
+.pink-card__bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0; /* Behind text */
+    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* VISIBILITY FIX */
+    filter: grayscale(100%);
+    opacity: 0.15; 
+    pointer-events: none;
 }
 
-/* Shared “content stretches, footer sticks” behavior */
-:is(.st-card__content, .pink-card__content, .gem-card-body) {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+/* 4.4 CONTENT */
+.pink-card__content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    z-index: 1; 
+    position: relative;
+}
+.pink-card__content br { display: none; }
+
+/* 4.5 CARD TYPOGRAPHY */
+.pink-card__eyebrow {
+    font-family: 'Menlo', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--st-color-accent);
+    margin-bottom: 0.75rem;
 }
 
-/* Shared “push to bottom” utility for body blocks */
-.u-push-bottom,
+.pink-card__title {
+    font-family: var(--wp--preset--font-family--playfair-display);
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.1;
+    color: #1e1e1e;
+}
+.pink-card__title a { text-decoration: none; color: inherit; }
+
+.pink-card__subtitle {
+    font-family: var(--wp--preset--font-family--fira-sans);
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
 .pink-card__body {
-  margin-bottom: auto !important;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
 }
 
-/* =========================================
-   ST: GRID (shared archive/home grid behavior)
-   Aliases: .gem-grid
-   ========================================= */
-
-.st-grid,
-.gem-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 30px;
+/* 4.6 FOOTER & TAGS */
+.pink-card__citation {
+    margin-top: auto;
+    border-top: 1px dotted var(--st-color-accent);
+    padding-top: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Menlo', monospace;
+    font-size: 0.75rem;
+    color: #888;
 }
 
-/* =========================================
-   ST: CALLOUT (unify filter notice + homepage callouts)
-   Aliases: .filter-active-notice
-   ========================================= */
-
-:is(.st-callout, .filter-active-notice) {
-  background: var(--st-color-surface-alt);
-  border-left: 4px solid var(--st-color-accent);
-  padding: 20px 30px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+.wp-block-post-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 0.5rem;
 }
 
-.st-callout--soft {
-  background: rgba(254, 18, 149, 0.05);
+.pink-card__tag, .skill-tag {
+    display: inline-block;
+    background: #f1f2f4;
+    color: #b91c68 !important;
+    border: 1px solid #e1e3e6;
+    border-radius: 4px;
+    padding: 0.3em 0.6em;
+    font-size: 0.7rem;
+    font-family: 'Menlo', monospace;
+    text-decoration: none !important;
 }
 
-/* Filter notice bits (keep existing classnames so nothing breaks) */
-.filter-label {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--st-color-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+/* 4.7 MEDIA STRIP */
+.pink-card__media {
+    position: relative;
+    width: 100%;
+    height: 48px;
+    margin-top: 2rem; /* Spacing */
+    background: transparent;
+    z-index: 1;
+    flex-shrink: 0;
 }
 
-.filter-value {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--st-color-accent);
+.pink-card__media img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: none !important;
+    border-radius: 0 !important;
+}
+
+/* ==========================================================================
+   5. FEATURED IMAGES & ARCHIVES (Restored)
+   ========================================================================== */
+.wp-block-post-featured-image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    width: 100%;
+    border-radius: 16px;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.wp-block-post-featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    border-radius: inherit !important;
+}
+
+.wp-block-post-featured-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(254, 18, 149, 0.7), rgba(43, 212, 170, 0.6));
+    mix-blend-mode: hard-light;
+    pointer-events: none;
+    border-radius: inherit !important;
+}
+
+/* Context Switching */
+body.single-post .wp-block-post-featured-image { aspect-ratio: 21 / 9; }
+body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 9999px; }
+
+/* ==========================================================================
+   6. ARCHIVE & GEM STYLES (Restored)
+   ========================================================================== */
+.gem-archive {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.archive-header { text-align: center; margin-bottom: 60px; }
+.archive-header h1 { font-size: 3rem; margin-bottom: 10px; }
+
+.filter-active-notice, .st-callout {
+    background: var(--st-color-surface-alt);
+    border-left: 4px solid var(--st-color-accent);
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
 }
 
 .clear-filter {
-  margin-left: auto;
-  padding: 6px 16px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: var(--st-color-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+    margin-left: auto;
+    padding: 6px 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
 }
 
-.clear-filter:hover {
-  background: var(--st-color-accent);
-  color: #fff;
-  border-color: var(--st-color-accent);
+/* ==========================================================================
+   7. MERMAID & FOOTER (Restored)
+   ========================================================================== */
+pre.mermaid {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 3rem auto !important;
+    max-width: 1000px !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
-/* =========================================
-   ARCHIVE HEADER (moved from gem-archive-styles.css)
-   ========================================= */
-
-.gem-archive {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.archive-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.archive-header h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  color: #0d1226;
-}
-
-.archive-header p {
-  font-size: 1.1rem;
-  color: var(--st-color-muted);
-  font-style: italic;
-}
-
-/* =========================================
-   ARCHIVE CARD INTERNALS (legacy selectors retained)
-   ========================================= */
-
-.gem-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.gem-title {
-  font-size: 1.2rem;
-  line-height: 1.4;
-  margin: 0;
-  flex: 1;
-}
-
-.gem-title a {
-  color: #0d1226;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.gem-title a:hover {
-  color: var(--st-color-accent);
-}
-
-/* Status badge (legacy kept, could later become .st-badge) */
-.gem-status {
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-
-/* Card footer */
-.gem-card-footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-  font-size: 0.85rem;
-}
-
-/* Responsive (moved + kept) */
-@media (max-width: 768px) {
-  .gem-grid {
-    grid-template-columns: 1fr;
-  }
-  .archive-header h1 {
-    font-size: 2rem;
-  }
-  .filter-active-notice {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .clear-filter {
-    margin-left: 0;
-    align-self: flex-end;
-  }
-  .gem-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .gem-status {
-    align-self: flex-start;
-  }
-  .gem-card-footer {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .gem-date {
-    align-self: flex-end;
-  }
+.wp-site-footer .wp-block-site-title,
+.wp-site-footer .wp-block-site-title a {
+    font-family: var(--wp--preset--font-family--playfair-display), serif !important;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
 }
