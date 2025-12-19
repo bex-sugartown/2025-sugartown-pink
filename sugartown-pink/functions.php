@@ -93,7 +93,7 @@ add_action( 'init', 'sugartown_pink_block_styles' );
 // Registers pattern categories.
 if ( ! function_exists( 'sugartown_pink_pattern_categories' ) ) :
 	/**
-	 * Registers pattern categories.
+	 * Registers block pattern categories.
 	 *
 	 * @since Sugartown Pink 1.0
 	 *
@@ -101,6 +101,7 @@ if ( ! function_exists( 'sugartown_pink_pattern_categories' ) ) :
 	 */
 	function sugartown_pink_pattern_categories() {
 
+		// Full-page layouts
 		register_block_pattern_category(
 			'sugartown_pink_page',
 			array(
@@ -109,6 +110,7 @@ if ( ! function_exists( 'sugartown_pink_pattern_categories' ) ) :
 			)
 		);
 
+		// Post format layouts
 		register_block_pattern_category(
 			'sugartown_pink_post-format',
 			array(
@@ -116,9 +118,20 @@ if ( ! function_exists( 'sugartown_pink_pattern_categories' ) ) :
 				'description' => __( 'A collection of post format patterns.', 'sugartown-pink' ),
 			)
 		);
+
+		// Sugartown system & utility patterns (callouts, cards, components)
+		register_block_pattern_category(
+			'sugartown',
+			array(
+				'label'       => __( 'Sugartown', 'sugartown-pink' ),
+				'description' => __( 'Sugartown system components, callouts, and utilities.', 'sugartown-pink' ),
+			)
+		);
 	}
 endif;
+
 add_action( 'init', 'sugartown_pink_pattern_categories' );
+
 
 // Registers block binding sources.
 if ( ! function_exists( 'sugartown_pink_register_block_bindings' ) ) :

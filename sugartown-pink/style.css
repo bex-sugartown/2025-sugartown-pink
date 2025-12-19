@@ -55,8 +55,11 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   --st-color-surface-alt: #f8f8fa;
 
   /* Dimensions */
-  --st-radius-card: 16px;
-  --st-radius-media: 35px;
+  --st-radius-xs: 4px;   /* buttons, tags */
+  --st-radius-sm: 8px;   /* code, callouts */
+  --st-radius-md: 12px;  /* cards */
+  --st-radius-lg: 16px;  /* ? */
+  --st-radius-xl: 35px;  /* hero */
   --st-shadow-card: 0 4px 12px rgba(254, 18, 149, 0.05);
   --wp--style--global--content-size: 800px;
 }
@@ -118,6 +121,8 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 /* Buttons */
+.wp-block-search, 
+.wp-element-button,
 .wp-block-button__link {
     border-radius: 4px !important;
     text-transform: uppercase;
@@ -145,6 +150,246 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 /* ==========================================================================
+   5.0 ST-CARD (Light Variant) — canonical card primitive (single-column)
+   Header pinned top, footer pinned bottom, content grows between.
+   Media strip centered at bottom.
+   ========================================================================== */
+
+:root{
+  --st-card-border: var(--st-color-accent, #FE1295);
+  --st-card-bg: var(--st-color-surface, #fff);
+  --st-card-bg-alt: var(--st-color-surface-alt, #fff0f5);
+  --st-card-text: var(--st-color-text, #222);
+  --st-card-muted: var(--st-color-muted, #666);
+
+  /* If not already defined elsewhere */
+  --st-radius-xs: 4px;
+  --st-radius-md: 12px;
+}
+
+/* Base card */
+.st-card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 420px;
+  width: 100%;
+  box-sizing: border-box;
+
+  background: var(--st-card-bg);
+  border: 1px solid var(--st-card-border);
+  border-radius: var(--st-radius-md);
+  padding: 28px;
+
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.st-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(254, 18, 149, 0.15);
+}
+
+/* Optional: tighter card */
+.st-card--compact{
+  padding: 20px;
+  min-height: 360px;
+}
+
+/* Background layer */
+.st-card__bg{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.14;
+  filter: grayscale(100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.st-card--illustrative .st-card__bg{
+  opacity: 0.15;
+  background-size: 90%;
+}
+
+/* Inner (text column + pinning model) */
+.st-card__inner{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;   /* allows footer pinning */
+  min-width: 0;
+}
+
+/* Header pinned top naturally */
+.st-card__header{
+  margin: 0 0 14px 0;
+}
+
+.st-card__eyebrow{
+  margin: 0 0 10px 0;
+  font-family: 'Menlo', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--st-card-border);
+}
+
+.st-card__title{
+  margin: 0;
+  font-family: var(--wp--preset--font-family--playfair-display), serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.st-card__title a{
+  color: var(--st-card-border);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.10em;
+}
+
+.st-card__subtitle{
+  margin: 10px 0 0 0;
+  font-family: var(--wp--preset--font-family--fira-sans), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #666;
+}
+
+/* Content floats between header and footer */
+.st-card__content{
+  margin: 10px 0 0 0;
+}
+
+.st-card__content p{
+  margin: 0 0 0.75rem 0;
+  color: var(--st-card-text);
+  line-height: 1.55;
+  font-size: 0.95rem;
+  text-wrap: pretty;
+}
+
+.st-card__content p:last-child{
+  margin-bottom: 0;
+}
+
+.st-card__sup{
+  text-decoration: none;
+  color: var(--st-card-border);
+}
+
+/* Footer pinned to bottom */
+.st-card__footer{
+  margin-top: auto;   /* <-- pin */
+  padding-top: 12px;
+}
+
+/* Divider lives in footer */
+.st-card__footer::before{
+  content: "";
+  display: block;
+  border-top: 1px dashed rgba(254, 18, 149, 0.35);
+  margin-bottom: 12px;
+}
+
+/* Citation */
+.st-card__citation{
+  font-family: 'Menlo','Monaco', monospace;
+  font-size: 0.7rem;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.st-card__citation a{
+  color: inherit;
+  text-decoration: none;
+}
+
+.st-card__citation a:hover{
+  text-decoration: underline;
+}
+
+/* Tags (future-clickable, visible hover now) */
+.st-card__tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.st-card__tag{
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.6em;
+  border-radius: var(--st-radius-xs);
+  border: 1px solid rgba(254, 18, 149, 0.35);
+  background: rgba(254, 18, 149, 0.08); /* light pink */
+  color: var(--st-card-border);
+  font-size: 0.75rem !important;
+  font-family: 'Menlo', monospace;
+  text-decoration: none !important;
+  line-height: 1.2;
+  transition: all 0.2s ease;
+}
+
+.st-card__tag:hover{
+  transform: translateY(-1px);
+  background: rgba(254, 18, 149, 0.14); /* slightly darker pink */
+  border-color: rgba(254, 18, 149, 0.55);
+}
+
+/* Media strip centered bottom */
+.st-card__media{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 48px;
+  margin-top: 2rem;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.st-card__media img{
+  display: block;
+  width: auto !important;
+  height: 100% !important;
+  object-fit: contain;
+  filter: none !important;
+  border-radius: 0 !important;
+}
+
+
+/* WP sometimes injects <br> and/or <p> around inline media; neutralize */
+.st-card__content br { display: none; }
+.st-card__media br { display: none !important; }
+.st-card__media p { margin: 0 !important; }
+.st-card__media a{
+  display: flex;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+
+/* Responsive: nothing special needed; it’s already single-column */
+@media (max-width: 780px){
+  .st-card{
+    min-height: unset;
+  }
+}
+
+/* ==========================================================================
    5. COMPONENT: THE PINK CARD (.pink-card)
    ========================================================================== */
 /* 5.1 WRAPPER */
@@ -160,7 +405,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     background-color: #fff;
     /* RESTORED: The Pink Border */
     border: 1px solid var(--st-color-accent);
-    border-radius: var(--st-radius-card);
+    border-radius: var(--st-radius-md);
     padding: 2rem;
     
     overflow: hidden;
@@ -243,7 +488,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 /* 5.5 FOOTER (Citation) - RESTORED */
 .pink-card__citation {
     padding-top: 0.75rem;
-    Padding-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
     margin-top: auto; /* Ensures it sits at the bottom */
     font-family: 'Menlo', 'Monaco', monospace;
     font-size: 0.7rem;
@@ -276,6 +521,11 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     filter: none !important;
     border-radius: 0 !important;
 }
+
+.pink-card__body { font-size: 0.95rem; line-height: 1.55; }
+.pink-card__body p { margin: 0 0 0.75rem 0; }
+.pink-card__sup { text-decoration: none; color: var(--st-color-accent); }
+
 
 /* ==========================================================================
    6. COMPONENT: FEATURED IMAGES (PROD MATCH)
@@ -362,7 +612,7 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
 .wp-block-tag-cloud {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     margin-bottom: 0.5rem;
 }
 
@@ -405,7 +655,7 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
 .archive-header { text-align: center; margin-bottom: 60px; }
 .archive-header h1 { font-size: 3rem; margin-bottom: 10px; }
 
-.filter-active-notice, .st-callout {
+.filter-active-notice {
     background: var(--st-color-surface-alt);
     border-left: 4px solid var(--st-color-accent);
     padding: 20px 30px;
@@ -427,12 +677,46 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
     font-size: 0.9rem;
 }
 
+/* ==========================================================================
+   10. CALLOUT / NOTE BLOCK (Editorial)
+   ========================================================================== */
+
+.st-callout {
+    background: #fff0f5;
+    border: 1px solid rgba(214, 51, 132, 0.35);
+    border-radius: 8px;
+    border-radius: var(--st-radius-sm);
+    padding: 1.25rem 1.5rem;
+    margin: 2.5rem 0;
+}
+
+.st-callout p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #444;
+}
+
+.st-callout a {
+    color: var(--st-color-accent);
+    font-weight: 600;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+}
+
+/* Optional variants (future-proofing) */
+.st-callout--info   { background: #f2fbff; border-color: rgba(0, 140, 255, 0.25); }
+.st-callout--tip    { background: #f3fff8; border-color: rgba(43, 212, 170, 0.35); }
+.st-callout--warn   { background: #fff9e6; border-color: rgba(255, 193, 7, 0.45); }
+.st-callout--danger { background: #fff1f2; border-color: rgba(220, 38, 38, 0.35); }
+
+
 /* Block Utilities */
 .wp-block-post-content { margin-top: 0; }
 .wp-site-blocks { gap: 0 !important; }
 
 /* ==========================================================================
-   10. MERMAID & FOOTER
+   11. MERMAID & FOOTER
    ========================================================================== */
 pre.mermaid {
     background-color: transparent !important;
