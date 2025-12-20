@@ -4,7 +4,7 @@
  * Template for displaying all Gems (Knowledge Graph)
  * 
  * File location: /wp-content/themes/sugartown-pink/archive-gem.php
- * Version: 4.0 - Revised card layout
+ * Version: 5.1 - FIXED: Added missing variable declarations
  */
 
 get_header(); 
@@ -60,7 +60,6 @@ if ($filter_wp_category || $filter_wp_tag) {
 }
 
 // Helper function to build archive filter URL
-// Always includes post_type=gem to ensure we stay on archive page
 function gem_archive_url($param_name, $param_value) {
     return add_query_arg(
         array(
@@ -76,7 +75,7 @@ function gem_archive_url($param_name, $param_value) {
     <header class="archive-header">
         <?php if ($active_filter) : ?>
             <!-- Filter Header -->
-            <div class="filter-active-notice st-callout st-callout--filter">
+            <div class="st-callout st-callout--filter">
                 <span class="filter-label"><?php echo esc_html($filter_label); ?>:</span>
                 <span class="filter-value"><?php echo esc_html($filter_value); ?></span>
                 <a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" class="clear-filter">✕ Clear Filter</a>
@@ -89,8 +88,13 @@ function gem_archive_url($param_name, $param_value) {
     </header>
 
     <?php if ( have_posts() ) : ?>
-        <div class="gem-grid">
+        <div class="st-grid">
             <?php while ( have_posts() ) : the_post(); 
+                
+                // ========================================
+                // CRITICAL: Define all variables BEFORE using them
+                // ========================================
+                
                 // Get custom meta fields
                 $project_id = get_post_meta( get_the_ID(), 'gem_related_project', true );
                 $gem_status = get_post_meta( get_the_ID(), 'gem_status', true );
@@ -109,44 +113,53 @@ function gem_archive_url($param_name, $param_value) {
                 
                 // Status badge color mapping
                 $status_colors = array(
-                    'Active'   => 'green',
-                    'Shipped'  => 'blue',
-                    'Draft'    => 'yellow',
-                    'Backlog'  => 'gray',
-                    'Done'     => 'purple',
-                    'In Progress' => 'orange'
+                    'Active'      => 'active',
+                    'Shipped'     => 'shipped',
+                    'Draft'       => 'draft',
+                    'Backlog'     => 'backlog',
+                    'Done'        => 'done',
+                    'In Progress' => 'progress'
                 );
-                $status_color = isset($status_colors[$gem_status]) ? $status_colors[$gem_status] : 'gray';
+                $status_color = isset($status_colors[$gem_status]) ? $status_colors[$gem_status] : 'backlog';
             ?>
             
-            <article class="gem-card st-card st-card--light" 
+            <article class="st-card" 
                      data-project="<?php echo esc_attr($project_id); ?>"
                      data-status="<?php echo esc_attr($gem_status); ?>"
                      data-category="<?php echo esc_attr($gem_category); ?>">
                 
-                <!-- Card Top: Title + Status Badge -->
-                <div class="gem-card-header">
-                    <h2 class="gem-title">
-                        <a href="<?php the_permalink(); ?>">
-                            <?php the_title(); ?>
-                        </a>
-                    </h2>
-                    
-                    <?php if ( $gem_status ) : ?>
-                        <span class="gem-status status-<?php echo esc_attr($status_color); ?>">
-                            <?php echo esc_html($gem_status); ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
+                <!-- Header: Title + Status Badge -->
+<div class="st-card__header">
+    <!-- Left Column: Stacking Content -->
+    <div class="st-card__header-content">
+        <div class="st-card__eyebrow">Eyebrow</div>
+        
+        <h2 class="st-card__title">
+            <a href="<?php the_permalink(); ?>">
+                <?php the_title(); ?>
+            </a>
+        </h2>
+        
+        <div class="st-card__subtitle">Subtitle</div>
+    </div>
+    
+    <!-- Right Column: Badge -->
+    <?php if ( $gem_status ) : ?>
+        <span class="st-badge st-badge--<?php echo esc_attr(strtolower(str_replace(' ', '-', $gem_status))); ?>">
+            <?php echo esc_html($gem_status); ?>
+        </span>
+    <?php endif; ?>
+</div>
+
                 
-                <!-- Card Body: Metadata (aligned to top) -->
-                <div class="gem-card-body">
+                <!-- Body: Metadata Rows -->
+                <div class="st-card__body">
                     
                     <!-- Project -->
                     <?php if ( $project_id ) : ?>
-                        <div class="gem-meta-row">
-                            <span class="meta-label">Project:</span>
-                            <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>" class="meta-link">
+                        <div class="st-card__meta">
+                            <span class="st-label">Project:</span>
+                            <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>" class="st-link">
                                 <?php echo esc_html($project_id); ?>
                                 <?php if ( $project_name && $project_name !== $project_id ) : ?>
                                     • <?php echo esc_html($project_name); ?>
@@ -155,14 +168,14 @@ function gem_archive_url($param_name, $param_value) {
                         </div>
                     <?php endif; ?>
                     
-                    <!-- Category: Gem Category + WP Categories on same line -->
+                    <!-- Category -->
                     <?php if ( $gem_category || $categories ) : ?>
-                        <div class="gem-meta-row">
-                            <span class="meta-label">Category:</span>
-                            <div class="meta-badges">
+                        <div class="st-card__meta">
+                            <span class="st-label">Category:</span>
+                            <div class="st-card__badges">
                                 <!-- Gem Category -->
                                 <?php if ( $gem_category ) : ?>
-                                    <a href="<?php echo esc_url( gem_archive_url('category', $gem_category) ); ?>" class="meta-badge">
+                                    <a href="<?php echo esc_url( gem_archive_url('category', $gem_category) ); ?>" class="st-tag">
                                         <?php echo esc_html($gem_category); ?>
                                     </a>
                                 <?php endif; ?>
@@ -170,7 +183,7 @@ function gem_archive_url($param_name, $param_value) {
                                 <!-- WP Categories -->
                                 <?php if ( $categories ) : ?>
                                     <?php foreach ( $categories as $cat ) : ?>
-                                        <a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>" class="meta-badge">
+                                        <a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>" class="st-tag">
                                             <?php echo esc_html( $cat->name ); ?>
                                         </a>
                                     <?php endforeach; ?>
@@ -181,12 +194,12 @@ function gem_archive_url($param_name, $param_value) {
                     
                     <!-- Tags -->
                     <?php if ( $tags ) : ?>
-                        <div class="gem-meta-row">
-                            <span class="meta-label">Tags:</span>
-                            <div class="meta-badges">
+                        <div class="st-card__meta">
+                            <span class="st-label">Tags:</span>
+                            <div class="st-card__badges">
                                 <?php foreach ( $tags as $tag ) : ?>
-                                    <a href="<?php echo esc_url( gem_archive_url('wp_tag', $tag->term_id) ); ?>" class="meta-badge tag">
-                                        #<?php echo esc_html( $tag->name ); ?>
+                                    <a href="<?php echo esc_url( gem_archive_url('st-tag', $tag->term_id) ); ?>" class="st-tag st-tag--hash">
+                                        <?php echo esc_html( $tag->name ); ?>
                                     </a>
                                 <?php endforeach; ?>
                             </div>
@@ -195,16 +208,16 @@ function gem_archive_url($param_name, $param_value) {
                     
                 </div>
                 
-                <!-- Card Footer: Next Step + Date (aligned to bottom) -->
-                <div class="gem-card-footer">
+                <!-- Footer: Next Step + Date -->
+                <div class="st-card__footer">
                     <?php if ( $action_item ) : ?>
-                        <div class="gem-next-step">
-                            <span class="meta-label">Next Step:</span>
-                            <span class="next-step-text"><?php echo esc_html($action_item); ?></span>
+                        <div class="st-card__action">
+                            <span class="st-label">Next Step:</span>
+                            <span class="st-card__action-text"><?php echo esc_html($action_item); ?></span>
                         </div>
                     <?php endif; ?>
                     
-                    <time class="gem-date" datetime="<?php echo get_the_date('c'); ?>">
+                    <time class="st-card__date" datetime="<?php echo get_the_date('c'); ?>">
                         <?php echo get_the_date(); ?>
                     </time>
                 </div>
