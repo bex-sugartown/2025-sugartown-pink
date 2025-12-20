@@ -48,3 +48,19 @@ When generating UI code:
 1.  **Do not** use WordPress Block classes (`wp-block-columns`, `wp-block-image`) for internal component structure.
 2.  **Use** the `layout_engine` Python module to generate standard HTML.
 3.  **Verify** against `style.css` v3.3+ to ensure box-model safety.
+
+---
+
+## Card System Update (v2025.12.19)
+
+The legacy `.pink-card` component has been superseded by the canonical `.st-card`
+(light variant).
+
+Key guarantees:
+- Header pinned to top
+- Footer pinned to bottom
+- Content flexes between
+- Media aligns center-bottom
+- Layout is independent of WordPress block wrappers
+
+`.pink-card` remains supported but is deprecated for new work.
