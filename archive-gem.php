@@ -2,9 +2,7 @@
 /**
  * Template Name: Gem Archive
  * Template for displaying all Gems (Knowledge Graph)
- * 
- * File location: /wp-content/themes/sugartown-pink/archive-gem.php
- * Version: 5.1 - FIXED: Added missing variable declarations
+ * Version: 5.0 - Full-featured header with eyebrow/title/subtitle/badge
  */
 
 get_header(); 
@@ -16,7 +14,7 @@ $filter_status = isset($_GET['status']) ? sanitize_text_field($_GET['status']) :
 $filter_wp_category = isset($_GET['wp_category']) ? intval($_GET['wp_category']) : 0;
 $filter_wp_tag = isset($_GET['wp_tag']) ? intval($_GET['wp_tag']) : 0;
 
-// Determine what we're filtering by
+// Determine active filter
 $active_filter = '';
 $filter_label = '';
 $filter_value = '';
@@ -59,7 +57,7 @@ if ($filter_wp_category || $filter_wp_tag) {
     });
 }
 
-// Helper function to build archive filter URL
+// Helper function for archive URLs
 function gem_archive_url($param_name, $param_value) {
     return add_query_arg(
         array(
@@ -74,14 +72,12 @@ function gem_archive_url($param_name, $param_value) {
 <div class="gem-archive">
     <header class="archive-header">
         <?php if ($active_filter) : ?>
-            <!-- Filter Header -->
             <div class="st-callout st-callout--filter">
                 <span class="filter-label"><?php echo esc_html($filter_label); ?>:</span>
                 <span class="filter-value"><?php echo esc_html($filter_value); ?></span>
                 <a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" class="clear-filter">✕ Clear Filter</a>
             </div>
         <?php else : ?>
-            <!-- Default Header -->
             <h1>Knowledge Graph</h1>
             <p>Topological content nodes • Not chronological blog posts</p>
         <?php endif; ?>
@@ -90,11 +86,6 @@ function gem_archive_url($param_name, $param_value) {
     <?php if ( have_posts() ) : ?>
         <div class="st-grid">
             <?php while ( have_posts() ) : the_post(); 
-                
-                // ========================================
-                // CRITICAL: Define all variables BEFORE using them
-                // ========================================
-                
                 // Get custom meta fields
                 $project_id = get_post_meta( get_the_ID(), 'gem_related_project', true );
                 $gem_status = get_post_meta( get_the_ID(), 'gem_status', true );
@@ -107,20 +98,42 @@ function gem_archive_url($param_name, $param_value) {
                     $project_name = sugartown_get_project_name( $project_id );
                 }
                 
+                // Build eyebrow: "PROJ-001 • Sugartown Headless CMS"
+                $eyebrow = '';
+                if ( $project_id ) {
+                    $eyebrow = $project_id;
+                    if ( $project_name && $project_name !== $project_id ) {
+                        $eyebrow .= ' • ' . $project_name;
+                    }
+                }
+                
                 // Get WordPress categories and tags
                 $categories = get_the_category();
                 $tags = get_the_tags();
                 
+                // Build subtitle: All categories separated by |
+                $subtitle_parts = array();
+                if ( $gem_category ) {
+                    $subtitle_parts[] = $gem_category;
+                }
+                if ( $categories ) {
+                    foreach ( $categories as $cat ) {
+                        $subtitle_parts[] = $cat->name;
+                    }
+                }
+                $subtitle = implode(' | ', $subtitle_parts);
+                
                 // Status badge color mapping
                 $status_colors = array(
-                    'Active'      => 'active',
-                    'Shipped'     => 'shipped',
-                    'Draft'       => 'draft',
-                    'Backlog'     => 'backlog',
-                    'Done'        => 'done',
-                    'In Progress' => 'progress'
+                    'Active'       => 'active',
+                    'Shipped'      => 'shipped',
+                    'Draft'        => 'draft',
+                    'Backlog'      => 'backlog',
+                    'Done'         => 'done',
+                    'In Progress'  => 'in-progress',
+                    'Live'         => 'live'
                 );
-                $status_color = isset($status_colors[$gem_status]) ? $status_colors[$gem_status] : 'backlog';
+                $status_class = isset($status_colors[$gem_status]) ? $status_colors[$gem_status] : 'default';
             ?>
             
             <article class="st-card" 
@@ -128,84 +141,50 @@ function gem_archive_url($param_name, $param_value) {
                      data-status="<?php echo esc_attr($gem_status); ?>"
                      data-category="<?php echo esc_attr($gem_category); ?>">
                 
-                <!-- Header: Title + Status Badge -->
-<div class="st-card__header">
-    <!-- Left Column: Stacking Content -->
-    <div class="st-card__header-content">
-        <div class="st-card__eyebrow">Eyebrow</div>
-        
-        <h2 class="st-card__title">
-            <a href="<?php the_permalink(); ?>">
-                <?php the_title(); ?>
-            </a>
-        </h2>
-        
-        <div class="st-card__subtitle">Subtitle</div>
-    </div>
-    
-    <!-- Right Column: Badge -->
-    <?php if ( $gem_status ) : ?>
-        <span class="st-badge st-badge--<?php echo esc_attr(strtolower(str_replace(' ', '-', $gem_status))); ?>">
-            <?php echo esc_html($gem_status); ?>
-        </span>
-    <?php endif; ?>
-</div>
-
-                
-                <!-- Body: Metadata Rows -->
-                <div class="st-card__body">
-                    
-                    <!-- Project -->
-                    <?php if ( $project_id ) : ?>
-                        <div class="st-card__meta">
-                            <span class="st-label">Project:</span>
-                            <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>" class="st-link">
-                                <?php echo esc_html($project_id); ?>
-                                <?php if ( $project_name && $project_name !== $project_id ) : ?>
-                                    • <?php echo esc_html($project_name); ?>
-                                <?php endif; ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <!-- Category -->
-                    <?php if ( $gem_category || $categories ) : ?>
-                        <div class="st-card__meta">
-                            <span class="st-label">Category:</span>
-                            <div class="st-card__badges">
-                                <!-- Gem Category -->
-                                <?php if ( $gem_category ) : ?>
-                                    <a href="<?php echo esc_url( gem_archive_url('category', $gem_category) ); ?>" class="st-tag">
-                                        <?php echo esc_html($gem_category); ?>
-                                    </a>
-                                <?php endif; ?>
-                                
-                                <!-- WP Categories -->
-                                <?php if ( $categories ) : ?>
-                                    <?php foreach ( $categories as $cat ) : ?>
-                                        <a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>" class="st-tag">
-                                            <?php echo esc_html( $cat->name ); ?>
-                                        </a>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                <!-- Header: Eyebrow/Title/Subtitle stack left, Badge floats right -->
+                <div class="st-card__header">
+                    <div class="st-card__header-content">
+                        <?php if ( $eyebrow ) : ?>
+                            <div class="st-card__eyebrow">
+                                <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>">
+                                    <?php echo esc_html($eyebrow); ?>
+                                </a>
                             </div>
-                        </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                        
+                        <h2 class="st-card__title">
+                            <a href="<?php the_permalink(); ?>">
+                                <?php the_title(); ?>
+                            </a>
+                        </h2>
+                        
+                        <?php if ( $subtitle ) : ?>
+                            <div class="st-card__subtitle"><?php echo esc_html($subtitle); ?></div>
+                        <?php endif; ?>
+                    </div>
                     
-                    <!-- Tags -->
+                    <?php if ( $gem_status ) : ?>
+                        <span class="st-badge st-badge--<?php echo esc_attr($status_class); ?>">
+                            <?php echo esc_html($gem_status); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Body: Tags -->
+                <div class="st-card__body">
                     <?php if ( $tags ) : ?>
                         <div class="st-card__meta">
                             <span class="st-label">Tags:</span>
-                            <div class="st-card__badges">
+                            <div class="st-card__tags">
                                 <?php foreach ( $tags as $tag ) : ?>
-                                    <a href="<?php echo esc_url( gem_archive_url('st-tag', $tag->term_id) ); ?>" class="st-tag st-tag--hash">
+                                    <a href="<?php echo esc_url( gem_archive_url('wp_tag', $tag->term_id) ); ?>" 
+                                       class="st-card__tag">
                                         <?php echo esc_html( $tag->name ); ?>
                                     </a>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                     <?php endif; ?>
-                    
                 </div>
                 
                 <!-- Footer: Next Step + Date -->

@@ -1,0 +1,8 @@
+# Core HTTP + CMS publishing
+requests>=2.31.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Markdown → HTML (CHANGELOG + docs import)
+markdown>=3.6
