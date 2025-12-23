@@ -260,14 +260,14 @@ add_action( 'init', 'register_sugartown_gems' );
  * Register Custom Meta Fields for Gems
  * Allows Python to read/write these fields via REST API.
  * 
- * ✅ FIXED: Added 'gem_category' to the list
+ * Taxonomy v4: gem_category removed (using WordPress categories instead)
  */
 function register_gem_meta_fields() {
     $meta_fields = array(
         'gem_status',
         'gem_action_item',
         'gem_related_project',
-        'gem_category'  // ✅ NEW: Now WordPress will accept this from Python
+        // 'gem_category' - REMOVED in v4: Using WordPress categories as single source of truth
     );
 
     foreach ( $meta_fields as $field ) {
@@ -403,23 +403,6 @@ function sugartown_enqueue_gem_archive_styles() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_gem_archive_styles' );
-
-/**
- * Enqueue gem archive filter JavaScript
- * Only loads on the gem archive page
- */
-function sugartown_enqueue_gem_archive_filter() {
-    if ( is_post_type_archive('gem') ) {
-        wp_enqueue_script(
-            'gem-archive-filter',
-            get_stylesheet_directory_uri() . '/assets/js/archive-gem-filter.js',
-            array(),
-            '1.0.0',
-            true // Load in footer
-        );
-    }
-}
-add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_gem_archive_filter' );
 
 /**
  * Helper function to get project name from project ID

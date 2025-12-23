@@ -346,12 +346,14 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   text-underline-offset: 0.10em;
 }
 
-.st-card__subtitle{
+.st-card__subtitle,
+.st-card__subtitle a{
   margin: 10px 0 0 0;
   font-family: var(--wp--preset--font-family--fira-sans), sans-serif;
   font-size: 1.1rem;
   font-weight: 400;
   color: #666;
+  text-decoration: none;
 }
 /* Content (main text, pushes footer down) */
 .st-card__content {
@@ -384,6 +386,12 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   margin-top: auto;   /* <-- pin */
   padding-top: 12px;
   font-size: 0.85rem;
+}
+.gem-archive .st-card__footer {
+  display: flex;
+  align-items: flex-end;        /* Date aligns with bottom of action */
+  justify-content: space-between; /* Push action left, date right */
+  gap: 12px;
 }
 
 /* Divider lives in footer */
@@ -620,7 +628,213 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 /* ==========================================================================
-   5. COMPONENT: THE PINK CARD (.pink-card) 
+   ST-CARD — Dark Variant (Scoped / Not Site-Wide Dark Mode)
+   Usage: <article class="st-card st-card--dark">…</article>
+   ========================================================================== */
+
+.st-card--dark{
+  /* Card surface */
+  background: #0f1117;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+}
+
+.st-card--dark:hover{
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,0.22),
+    0 0 0 1px rgba(254, 18, 149, 0.28);
+}
+
+/* Typography */
+.st-card--dark .st-card__eyebrow,
+.st-card--dark .st-card__eyebrow a{
+  color: rgba(255, 111, 184, 0.9); /* cooled pink */
+}
+
+.st-card--dark .st-card__title a{
+  color: rgba(255, 111, 184, 0.98);
+  text-decoration-color: rgba(255, 111, 184, 0.25);
+}
+
+.st-card--dark .st-card__subtitle,
+.st-card--dark .st-card__subtitle a{
+  color: rgba(230,232,238,0.72);
+  text-decoration: none;
+}
+
+.st-card--dark .st-label{
+  color: rgba(230,232,238,0.55);
+}
+
+.st-card--dark .st-card__action-text{
+  color: rgba(230,232,238,0.78);
+}
+
+/* Footer divider + date */
+.st-card--dark .st-card__footer::before{
+  border-top: 5px dashed rgba(255, 111, 184, 0.22);
+}
+.st-card--dark .st-card__date{
+  color: rgba(230,232,238,0.55);
+}
+
+/* Tags: inverted, more “terminal” */
+.st-card--dark .st-card__tag{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 111, 184, 0.28);
+  color: rgba(255, 111, 184, 0.95);
+}
+
+.st-card--dark .st-card__tag:hover{
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255, 111, 184, 0.45);
+  box-shadow: 0 2px 10px rgba(255, 111, 184, 0.12);
+}
+
+/* Badges: flatten so they don’t look like “pastel stickers” on dark */
+.st-card--dark .st-badge{
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(230,232,238,0.85) !important;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+/* =========================================
+   GEM ARCHIVE - RESULT COUNT & PAGINATION
+   Add to end of style.css
+   ========================================= */
+
+/* Result count display */
+.gem-results-info {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(254, 18, 149, 0.15);
+}
+
+.results-count {
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    text-align: center;
+}
+
+.results-count strong {
+    color: var(--st-color-accent);
+    font-weight: 700;
+}
+
+/* Pagination container */
+.gem-pagination {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Pagination list */
+.gem-pagination .page-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Pagination links */
+.gem-pagination .page-numbers li {
+    display: inline-block;
+}
+
+.gem-pagination a.page-numbers,
+.gem-pagination span.page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 4px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Pagination hover state */
+.gem-pagination a.page-numbers:hover {
+    background: var(--st-color-accent-soft);
+    border-color: var(--st-color-accent);
+    color: var(--st-color-accent);
+    transform: translateY(-2px);
+}
+
+/* Current page */
+.gem-pagination span.page-numbers.current {
+    background: var(--st-color-accent);
+    border-color: var(--st-color-accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+/* Prev/Next links */
+.gem-pagination .prev,
+.gem-pagination .next {
+    font-weight: 600;
+}
+
+/* No results message */
+.no-gems-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--st-color-surface-alt);
+    border-radius: var(--st-radius-md);
+    margin-top: 40px;
+}
+
+.no-gems-message p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.no-gems-message .button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--st-color-accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.no-gems-message .button:hover {
+    background: #E5007D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(254, 18, 149, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .results-count {
+        font-size: 0.85rem;
+    }
+    
+    .gem-pagination a.page-numbers,
+    .gem-pagination span.page-numbers {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 8px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================================================
+   5. DEPRECATED: THE PINK CARD (.pink-card) 
    ========================================================================== */
 /* 5.1 WRAPPER */
 .pink-card {

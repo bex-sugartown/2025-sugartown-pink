@@ -2,14 +2,13 @@
 /**
  * Template Name: Gem Archive
  * Template for displaying all Gems (Knowledge Graph)
- * Version: 5.0 - Full-featured header with eyebrow/title/subtitle/badge
+ * Version: 6.0 - Taxonomy v4 (WordPress categories only, no gem_category meta)
  */
 
 get_header(); 
 
 // Get filter parameters from URL
 $filter_project = isset($_GET['project']) ? sanitize_text_field($_GET['project']) : '';
-$filter_category = isset($_GET['category']) ? sanitize_text_field($_GET['category']) : '';
 $filter_status = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : '';
 $filter_wp_category = isset($_GET['wp_category']) ? intval($_GET['wp_category']) : 0;
 $filter_wp_tag = isset($_GET['wp_tag']) ? intval($_GET['wp_tag']) : 0;
@@ -23,10 +22,6 @@ if ($filter_project) {
     $active_filter = 'project';
     $filter_label = 'PROJECT';
     $filter_value = $filter_project . ' • ' . sugartown_get_project_name($filter_project);
-} elseif ($filter_category) {
-    $active_filter = 'category';
-    $filter_label = 'CATEGORY';
-    $filter_value = $filter_category;
 } elseif ($filter_status) {
     $active_filter = 'status';
     $filter_label = 'STATUS';
@@ -43,19 +38,50 @@ if ($filter_project) {
     $filter_value = $tag ? $tag->name : '';
 }
 
-// Modify query if filtering
-if ($filter_wp_category || $filter_wp_tag) {
-    add_action('pre_get_posts', function($query) use ($filter_wp_category, $filter_wp_tag) {
-        if (is_admin() || !$query->is_main_query()) return;
-        
-        if ($filter_wp_category) {
-            $query->set('cat', $filter_wp_category);
-        }
-        if ($filter_wp_tag) {
-            $query->set('tag_id', $filter_wp_tag);
-        }
-    });
+// Build custom query args
+$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+$args = array(
+    'post_type' => 'gem',
+    'posts_per_page' => 9,
+    'paged' => $paged,
+    'post_status' => 'publish',
+    'orderby' => 'date',
+    'order' => 'DESC'
+);
+
+// Apply taxonomy filters (WP Categories & Tags)
+if ($filter_wp_category) {
+    $args['cat'] = $filter_wp_category;
 }
+
+if ($filter_wp_tag) {
+    $args['tag_id'] = $filter_wp_tag;
+}
+
+// Apply meta filters (Project, Status)
+if ($filter_project || $filter_status) {
+    $args['meta_query'] = array('relation' => 'AND');
+    
+    if ($filter_project) {
+        $args['meta_query'][] = array(
+            'key' => 'gem_related_project',
+            'value' => $filter_project,
+            'compare' => '='
+        );
+    }
+    
+    if ($filter_status) {
+        $args['meta_query'][] = array(
+            'key' => 'gem_status',
+            'value' => $filter_status,
+            'compare' => '='
+        );
+    }
+}
+
+// Create custom query
+$gem_query = new WP_Query($args);
 
 // Helper function for archive URLs
 function gem_archive_url($param_name, $param_value) {
@@ -83,13 +109,25 @@ function gem_archive_url($param_name, $param_value) {
         <?php endif; ?>
     </header>
 
-    <?php if ( have_posts() ) : ?>
+    <?php if ( $gem_query->have_posts() ) : ?>
+        
+        <!-- Result Count Display -->
+        <div class="gem-results-info">
+            <?php
+            $showing_start = (($paged - 1) * 9) + 1;
+            $showing_end = min($showing_start + $gem_query->post_count - 1, $gem_query->found_posts);
+            ?>
+            <p class="results-count">
+                Showing <strong><?php echo $showing_start; ?>-<?php echo $showing_end; ?></strong> 
+                of <strong><?php echo $gem_query->found_posts; ?></strong> gems
+            </p>
+        </div>
+        
         <div class="st-grid">
-            <?php while ( have_posts() ) : the_post(); 
-                // Get custom meta fields
+            <?php while ( $gem_query->have_posts() ) : $gem_query->the_post(); 
+                // Get custom meta fields (Taxonomy v4: no gem_category)
                 $project_id = get_post_meta( get_the_ID(), 'gem_related_project', true );
                 $gem_status = get_post_meta( get_the_ID(), 'gem_status', true );
-                $gem_category = get_post_meta( get_the_ID(), 'gem_category', true );
                 $action_item = get_post_meta( get_the_ID(), 'gem_action_item', true );
                 
                 // Get project name
@@ -110,18 +148,15 @@ function gem_archive_url($param_name, $param_value) {
                 // Get WordPress categories and tags
                 $categories = get_the_category();
                 $tags = get_the_tags();
-                
-                // Build subtitle: All categories separated by |
-                $subtitle_parts = array();
-                if ( $gem_category ) {
-                    $subtitle_parts[] = $gem_category;
+
+                // Build subtitle: Single WordPress category (clickable)
+                $subtitle = '';
+                $subtitle_url = '';
+                if ( $categories && !empty($categories) ) {
+                    $primary_cat = $categories[0];
+                    $subtitle = $primary_cat->name;
+                    $subtitle_url = gem_archive_url('wp_category', $primary_cat->term_id);
                 }
-                if ( $categories ) {
-                    foreach ( $categories as $cat ) {
-                        $subtitle_parts[] = $cat->name;
-                    }
-                }
-                $subtitle = implode(' | ', $subtitle_parts);
                 
                 // Status badge color mapping
                 $status_colors = array(
@@ -134,12 +169,26 @@ function gem_archive_url($param_name, $param_value) {
                     'Live'         => 'live'
                 );
                 $status_class = isset($status_colors[$gem_status]) ? $status_colors[$gem_status] : 'default';
+                
+                // Dark card trigger tags (slugs)
+                $dark_trigger_slugs = array('system', 'meta', 'architecture', 'dx');
+                $is_dark = false;
+                if ( $tags ) {
+                    foreach ( $tags as $t ) {
+                        if ( in_array( $t->slug, $dark_trigger_slugs, true ) ) {
+                            $is_dark = true;
+                            break;
+                        }
+                    }
+                }
+                
+                $card_classes = 'st-card' . ( $is_dark ? ' st-card--dark' : '' );
             ?>
             
-            <article class="st-card" 
+            <article class="<?php echo esc_attr($card_classes); ?>"
                      data-project="<?php echo esc_attr($project_id); ?>"
-                     data-status="<?php echo esc_attr($gem_status); ?>"
-                     data-category="<?php echo esc_attr($gem_category); ?>">
+                     data-status="<?php echo esc_attr($gem_status); ?>">
+
                 
                 <!-- Header: Eyebrow/Title/Subtitle stack left, Badge floats right -->
                 <div class="st-card__header">
@@ -159,7 +208,12 @@ function gem_archive_url($param_name, $param_value) {
                         </h2>
                         
                         <?php if ( $subtitle ) : ?>
-                            <div class="st-card__subtitle"><?php echo esc_html($subtitle); ?></div>
+                            <div class="st-card__subtitle">
+                                <span class="st-label">Category:</span>
+                                <a href="<?php echo esc_url($subtitle_url); ?>">
+                                    <?php echo esc_html($subtitle); ?>
+                                </a>
+                            </div>
                         <?php endif; ?>
                     </div>
                     
@@ -204,12 +258,31 @@ function gem_archive_url($param_name, $param_value) {
             </article>
             
             <?php endwhile; ?>
+            <?php wp_reset_postdata(); ?>
         </div>
         
-        <?php the_posts_pagination(); ?>
+        <!-- Pagination (only show if more than 1 page) -->
+        <?php if ( $gem_query->max_num_pages > 1 ) : ?>
+            <div class="gem-pagination">
+                <?php 
+                echo paginate_links(array(
+                    'total' => $gem_query->max_num_pages,
+                    'current' => $paged,
+                    'prev_text' => '← Previous',
+                    'next_text' => 'Next →',
+                    'type' => 'list'
+                ));
+                ?>
+            </div>
+        <?php endif; ?>
         
     <?php else : ?>
-        <p>No gems found.</p>
+        <div class="no-gems-message">
+            <p>No gems found matching your criteria.</p>
+            <?php if ($active_filter) : ?>
+                <p><a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" class="button">View All Gems</a></p>
+            <?php endif; ?>
+        </div>
     <?php endif; ?>
 </div>
 
