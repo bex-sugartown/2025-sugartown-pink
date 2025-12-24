@@ -1,6 +1,7 @@
 <?php
 /**
  * Template Name: Gem Archive
+ * Template Post Type: page
  * Template for displaying all Gems (Knowledge Graph)
  * Version: 6.0 - Taxonomy v4 (WordPress categories only, no gem_category meta)
  */
@@ -85,13 +86,8 @@ $gem_query = new WP_Query($args);
 
 // Helper function for archive URLs
 function gem_archive_url($param_name, $param_value) {
-    return add_query_arg(
-        array(
-            'post_type' => 'gem',
-            $param_name => $param_value
-        ),
-        home_url('/')
-    );
+  $base = get_post_type_archive_link('gem'); // will be /knowledge-graph/
+  return add_query_arg(array($param_name => $param_value), $base);
 }
 ?>
 
@@ -101,13 +97,37 @@ function gem_archive_url($param_name, $param_value) {
             <div class="st-callout st-callout--filter">
                 <span class="filter-label"><?php echo esc_html($filter_label); ?>:</span>
                 <span class="filter-value"><?php echo esc_html($filter_value); ?></span>
-                <a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" class="clear-filter">✕ Clear Filter</a>
+                <a href="<?php echo esc_url( get_post_type_archive_link('gem') ); ?>" class="clear-filter">✕ Clear Filter</a>
             </div>
         <?php else : ?>
             <h1>Knowledge Graph</h1>
             <p>Topological content nodes • Not chronological blog posts</p>
         <?php endif; ?>
     </header>
+    
+    <?php
+    // Treat any of these as "results mode"
+    $filter_keys = array('project', 'category', 'wp_category', 'tag', 'wp_tag', 'status', 's'); // add more if you use them
+    $has_filters = false;
+
+    foreach ($filter_keys as $k) {
+    if (isset($_GET[$k]) && $_GET[$k] !== '') {
+        $has_filters = true;
+        break;
+    }
+    }
+    ?>
+
+    <?php
+    if (!$has_filters) {
+    $intro_page = get_page_by_path('knowledge-graph-intro');
+    if ($intro_page) {
+        echo '<section class="kg-intro st-container">';
+        echo apply_filters('the_content', $intro_page->post_content);
+        echo '</section>';
+    }
+    }
+    ?>
 
     <?php if ( $gem_query->have_posts() ) : ?>
         

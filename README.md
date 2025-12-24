@@ -189,6 +189,30 @@ All card-based surfaces—including:
 Header/footer pinning, spacing, and z-index behavior are defined by the component
 contract and must not be overridden per surface.
 
+**Variants:**
+- `.st-card` (default, light)
+- `.st-card--dark` (automatic, tag-triggered)
+
+**Dark Trigger Tags:**
+Cards automatically receive `.st-card--dark` class when they include any of these tag slugs:
+- `system`
+- `meta`
+- `architecture`
+- `dx`
+
+**Usage:**
+```php
+// Archive template automatically applies dark class
+$dark_trigger_slugs = array('system', 'meta', 'architecture', 'dx');
+if (gem has matching tag) {
+    $card_classes .= ' st-card--dark';
+}
+```
+
+**Design Intent:**
+Dark cards signal meta-level, architectural, or system-focused content. They provide visual hierarchy and content categorization at a glance.
+```
+
 ---
 
 ## A.2 Grid Contract <a id="contract-grid"></a>

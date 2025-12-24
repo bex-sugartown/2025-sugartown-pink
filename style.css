@@ -165,11 +165,37 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 /* Grid container - forces grid layout */
 .gem-grid,
 .st-grid {
+    position: relative;
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
-    gap: 30px !important;
+    gap: 40px !important;  /* Increased from 30px to show graph between cards */
     margin-bottom: 40px !important;
     width: 100% !important;
+}
+
+/* Knowledge graph background - extends beyond grid into margins */
+.gem-grid::before,
+.st-grid::before {
+    content: '';
+    position: absolute;
+    top: -40px;  /* Start above grid */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;  /* Extends 10% beyond each side */
+    height: calc(100% + 80px);  /* Extends above and below */
+    background-image: url('https://sugartown.io/wp-content/uploads/2025/12/knowledge_graph_light.svg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 110%;  /* Slightly larger than container */
+    opacity: 0.65;  /* Bumped from 0.5 for visibility */
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gem-grid > *,
+.st-grid > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* If using wrapper pattern */
@@ -202,7 +228,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     }
 }
 /* ==========================================================================
-   5.0 ST-CARD (Light Variant) — canonical card primitive (single-column)
+   5.0 ST-CARD (Light Variant) â€” canonical card primitive (single-column)
    Header pinned top, footer pinned bottom, content grows between.
    Media strip centered at bottom.
    ========================================================================== */
@@ -294,7 +320,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   margin: 0 0 14px 0;
 }
 
-/* Left column: Stacks eyebrow → title → subtitle */
+/* Left column: Stacks eyebrow â†’ title â†’ subtitle */
 .st-card__header-content {
   display: flex;
   flex-direction: column;
@@ -620,7 +646,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 
-/* Responsive: nothing special needed; it’s already single-column */
+/* Responsive: nothing special needed; itâ€™s already single-column */
 @media (max-width: 780px){
   .st-card{
     min-height: unset;
@@ -628,8 +654,8 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 /* ==========================================================================
-   ST-CARD — Dark Variant (Scoped / Not Site-Wide Dark Mode)
-   Usage: <article class="st-card st-card--dark">…</article>
+   ST-CARD â€” Dark Variant (Scoped / Not Site-Wide Dark Mode)
+   Usage: <article class="st-card st-card--dark">â€¦</article>
    ========================================================================== */
 
 .st-card--dark{
@@ -679,7 +705,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   color: rgba(230,232,238,0.55);
 }
 
-/* Tags: inverted, more “terminal” */
+/* Tags: inverted, more â€œterminalâ€ */
 .st-card--dark .st-card__tag{
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255, 111, 184, 0.28);
@@ -692,7 +718,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   box-shadow: 0 2px 10px rgba(255, 111, 184, 0.12);
 }
 
-/* Badges: flatten so they don’t look like “pastel stickers” on dark */
+/* Badges: flatten so they donâ€™t look like â€œpastel stickersâ€ on dark */
 .st-card--dark .st-badge{
   background: rgba(255,255,255,0.08) !important;
   color: rgba(230,232,238,0.85) !important;

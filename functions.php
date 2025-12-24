@@ -241,9 +241,10 @@ function register_sugartown_gems() {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'gem' ), // The URL will be sugartown.io/gem/title
         'capability_type'    => 'post',
-        'has_archive'        => true,
+        'rewrite'            => array( 'slug' => 'gem' ),              // single gem stays /gem/{slug}
+        'has_archive'        => 'knowledge-graph',                     // archive becomes /knowledge-graph/
+        'with_front'         => false,
         'hierarchical'       => false,
         'menu_position'      => 6,
         'menu_icon'          => 'dashicons-diamond', // 💎 Icon!
