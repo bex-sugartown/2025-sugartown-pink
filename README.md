@@ -104,6 +104,251 @@ The canonical card definition is governed by the **Design System Contracts**
 
 ---
 
+### Interactive Primitive: `st-chip` <a id="st-chip"></a>
+
+**Status:** ✅ Canonical (v2025.12.27)  
+**Purpose:** Interactive pill/tag component for filters, category links, and navigation
+
+`st-chip` is the canonical interactive primitive for clickable tags, category pills, and filter elements.
+
+**Structure:**
+```html
+<a href="..." class="st-chip">
+    Label Text
+</a>
+```
+
+**Variants:**
+- `.st-chip` (default: light background, pink hover)
+- `.st-chip--active` (selected state)
+- `.st-chip--dark` (dark background variant)
+
+**Usage Context:**
+- Archive filter bars (Project, Status, Topic)
+- Hero "Start Here" navigation links
+- Category/tag pill collections
+- Any interactive chip/pill UI pattern
+
+**States:**
+- Default: subtle background, border
+- Hover: pink background (#FF69B4), white text
+- Active: maintains pink background, bold weight
+
+**Container Utility:**
+Use `.st-chip-row` to wrap multiple chips with consistent gap spacing:
+```html
+<div class="st-chip-row">
+    <a href="..." class="st-chip">Chip 1</a>
+    <a href="..." class="st-chip st-chip--active">Chip 2</a>
+    <a href="..." class="st-chip">Chip 3</a>
+</div>
+```
+
+**Design Intent:**
+Provides consistent interactive behavior across all chip-style UI elements. Replaces inconsistent custom filter/tag implementations.
+
+---
+
+### Typography Primitive: `st-label` <a id="st-label"></a>
+
+**Status:** ✅ Canonical (v2025.12.27)  
+**Purpose:** Consistent metadata label typography
+
+`st-label` standardizes label styling for metadata fields across cards, filters, and content sections.
+
+**Structure:**
+```html
+<span class="st-label">Project:</span>
+<span class="st-label">Category:</span>
+<span class="st-label">Next Step:</span>
+```
+
+**Visual Properties:**
+- Color: `#999` (light gray)
+- Font weight: 500 (medium)
+- Font size: 0.9rem (or inherit)
+- Text transform: none (lowercase preserved)
+- White-space: nowrap (prevents awkward wrapping)
+
+**Usage Context:**
+- Card metadata rows ("Project:", "Category:", "Tags:")
+- Filter section headers
+- Form field labels
+- Any metadata key/label pairing
+
+**Deprecated Alternative:**
+- ~~`.kg-filter-bar__label`~~ → Use `.st-label` instead
+
+**Design Intent:**
+Creates visual hierarchy by distinguishing labels from their values. Ensures consistent typography across all metadata displays.
+
+---
+
+### Layout Utility: `st-chip-row` <a id="st-chip-row"></a>
+
+**Status:** ✅ Canonical (v2025.12.27)  
+**Purpose:** Uniform horizontal chip/pill layout with wrapping
+
+**Structure:**
+```html
+<div class="st-chip-row">
+    <!-- Multiple st-chip elements -->
+</div>
+```
+
+**Behavior:**
+- Flexbox row layout with wrapping
+- Consistent gap spacing (8px default)
+- Aligns chips to flex-start
+- Handles overflow gracefully
+
+**Usage Context:**
+- Filter bars (horizontal chip collections)
+- Tag/category pill rows in cards
+- Multi-select UI patterns
+
+**Design Intent:**
+Eliminates inconsistent spacing and alignment in chip collections. Single utility for all horizontal pill layouts.
+
+---
+
+### Template Part Integration Pattern
+
+WordPress Block Theme template parts (Site Editor managed) must be rendered in PHP templates using `do_blocks()`:
+```php
+// header.php
+if ( has_block( 'core/template-part', 'pink-header' ) ) {
+    echo do_blocks( '<!-- wp:template-part {"slug":"pink-header"} /-->' );
+}
+
+// footer.php
+if ( has_block( 'core/template-part', 'pink-footer' ) ) {
+    echo do_blocks( '<!-- wp:template-part {"slug":"pink-footer"} /-->' );
+}
+```
+
+This ensures visual consistency between CMS-managed pages and PHP archive templates.
+
+**Shipped:** v2025.12.24 (resolved header/footer parity across archive + content pages)
+
+---
+
+## 5.2 Archive Filter System <a id="archive-filter-system"></a>
+
+**Status:** ✅ Canonical (v2025.12.27)  
+**Components:** `st-chip`, `st-label`, `st-chip-row`
+
+### Filter Bar Architecture
+
+The archive filter system uses interactive `st-chip` primitives organized by filter category.
+
+**Structure:**
+```html
+<div class="kg-filter-bar">
+    <div class="kg-filter-section">
+        <span class="st-label">Project:</span>
+        <div class="st-chip-row">
+            <a href="..." class="st-chip">PROJ-001</a>
+            <a href="..." class="st-chip st-chip--active">PROJ-002</a>
+        </div>
+    </div>
+    
+    <div class="kg-filter-section">
+        <span class="st-label">Topic:</span>
+        <div class="kg-filter-dropdown">
+            <!-- Multi-column dropdown with st-chip elements -->
+        </div>
+    </div>
+</div>
+```
+
+### Filter Types
+
+1. **Inline Chips** (Project, Status)
+   - Horizontal chip row with wrapping
+   - Single-select behavior
+   - Direct category filtering
+
+2. **Dropdown Filters** (Topic)
+   - Floating multi-column layout
+   - Checkbox-style multi-select
+   - Tag-based filtering with OR logic
+
+### Mobile Behavior
+
+**Breakpoint:** 800px
+
+- **Desktop (>800px):**
+  - Inline horizontal layout
+  - Multi-column dropdown for Topic
+  
+- **Mobile (≤800px):**
+  - Full-width overlay
+  - Single-column chip stacking
+  - Sticky filter bar
+
+### Content Container Alignment
+
+**Rule:** All filter bars and hero sections must align with the 800px content container.
+
+```css
+.kg-filter-bar,
+.kg-hero {
+    max-width: 800px;
+    margin: 0 auto;
+}
+```
+
+**Rationale:**
+- Maintains visual continuity with main content
+- Prevents filter elements from spanning full viewport width
+- Creates consistent left-edge alignment on wide screens
+
+**Applies to:**
+- Archive filter bars
+- Hero "Start Here" sections
+- Any full-width interactive navigation elements
+
+**Shipped:** v2025.12.27
+
+---
+
+## 5.3 Deprecated Components <a id="deprecated-components"></a>
+
+### ~~`.kg-filter-bar__label`~~ → Use `.st-label` <a id="deprecated-kg-filter-label"></a>
+
+**Status:** ⚠️ Deprecated (v2025.12.27)  
+**Replacement:** `.st-label`
+
+**Reason for Deprecation:**
+- Inconsistent naming convention (prefixed with `kg-` instead of `st-`)
+- Hardcoded uppercase text-transform (not flexible)
+- Tied to filter-bar context (not reusable)
+
+**Migration Path:**
+```html
+<!-- OLD (Deprecated) -->
+<span class="kg-filter-bar__label">PROJECT</span>
+
+<!-- NEW (Canonical) -->
+<span class="st-label">Project:</span>
+```
+
+**Breaking Changes:**
+- Text transform: uppercase → none (preserve natural case)
+- Context independence: filter-specific → universal label primitive
+
+**Sunset Timeline:**
+- v2025.12.27: Marked deprecated, `.st-label` canonical
+- v2026.01.xx: Remove from codebase (TBD)
+
+**Support Status:**
+- Still rendered if present in legacy markup
+- No new usage permitted
+- Existing instances should migrate on next edit
+
+---
+
 ## 6. WordPress-Specific Concerns (Implementation Details) <a id="wp-boundaries"></a>
 
 The following concerns are still owned by WordPress and this theme:
@@ -257,6 +502,55 @@ Design system contracts must **not** depend on:
 - WP-specific DOM structure
 
 If a component cannot survive outside WordPress, it is **not** a design system primitive.
+
+---
+
+## A.6 Content Model Separation Rule <a id="contract-content-separation"></a>
+
+**Established:** v2025.12.24
+
+Narrative content must not be hardcoded in templates.
+
+**Enforcement:**
+- Landing page content → First-class Gems (CPT with meta fields)
+- Archive templates → Structure only (grids, filters, pagination)
+- PHP templates → Layout logic, not storytelling
+
+**Rationale:**
+Hardcoded narrative in templates:
+- Cannot be queried or filtered
+- Does not participate in taxonomy
+- Creates CMS/template boundary violations
+- Blocks future headless migrations
+
+**Example Violation (Deprecated):**
+```php
+// ❌ WRONG: Hardcoded narrative in archive-gem.php
+<div class="archive-intro">
+    <h1>The Knowledge Graph</h1>
+    <p>This is the story of how scope creep became a feature...</p>
+</div>
+```
+
+**Correct Pattern (Enforced):**
+```php
+// ✅ CORRECT: Narrative as queryable Gem
+$landing_gem = get_posts([
+    'name' => 'knowledge-graph-landing',
+    'post_type' => 'gem',
+    'posts_per_page' => 1
+]);
+
+if ( $landing_gem && !is_filtered_archive() ) {
+    echo render_gem_content( $landing_gem[0] );
+}
+```
+
+This rule applies to:
+- Section landing pages
+- Archive introductions
+- Feature explanations
+- Any prose longer than UI microcopy
 
 ---
 

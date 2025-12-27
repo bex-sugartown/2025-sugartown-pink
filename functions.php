@@ -242,9 +242,11 @@ function register_sugartown_gems() {
         'show_in_menu'       => true,
         'query_var'          => true,
         'capability_type'    => 'post',
-        'rewrite'            => array( 'slug' => 'gem' ),              // single gem stays /gem/{slug}
+        'rewrite'            => array(
+            'slug'       => 'gem',       // single: /gem/{slug}
+            'with_front' => false,
+         ), 
         'has_archive'        => 'knowledge-graph',                     // archive becomes /knowledge-graph/
-        'with_front'         => false,
         'hierarchical'       => false,
         'menu_position'      => 6,
         'menu_icon'          => 'dashicons-diamond', // 💎 Icon!
@@ -281,6 +283,13 @@ function register_gem_meta_fields() {
     }
 }
 add_action( 'init', 'register_gem_meta_fields' );
+add_action('template_redirect', function () {
+  $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+  if ($path === 'knowledge_graph') {
+    wp_redirect(home_url('/knowledge-graph/'), 301);
+    exit;
+  }
+});
 
 function sugartown_mermaid_shortcode( $atts, $content = '' ) {
     // Don't escape content; Mermaid needs the raw syntax.
@@ -413,11 +422,24 @@ add_action( 'wp_enqueue_scripts', 'sugartown_enqueue_gem_archive_styles' );
  */
 function sugartown_get_project_name( $project_id ) {
     $projects = array(
-        'PROJ-001' => 'Sugartown Headless CMS',
+        'PROJ-001' => 'Sugartown CMS',
         'PROJ-002' => 'The Resume Factory',
-        'PROJ-003' => 'Atomic Design System (Pink)',
-        'PROJ-004' => 'The Visualization Engine',
+        'PROJ-003' => 'Sugartown Pink Design System',
+        'PROJ-004' => 'Knowledge Graph Viz Engine',
     );
     
     return isset($projects[$project_id]) ? $projects[$project_id] : $project_id;
 }
+
+function sugartown_enqueue_kg_filters() {
+    if (is_post_type_archive('gem')) {
+        wp_enqueue_script(
+            'kg-filters',
+            get_template_directory_uri() . '/assets/js/kg-filters.js',
+            array(),
+            '1.0.0',
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'sugartown_enqueue_kg_filters');

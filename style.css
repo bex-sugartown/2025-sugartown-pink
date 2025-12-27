@@ -173,6 +173,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
     width: 100% !important;
 }
 
+
 /* Knowledge graph background - extends beyond grid into margins */
 .gem-grid::before,
 .st-grid::before {
@@ -313,24 +314,18 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
    ========================================= */
 
 .st-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto; /* eyebrow fills, badge shrinks */
+  gap: 8px 16px; /* vertical | horizontal */
+  align-items: end; /* align eyebrow and badge at bottom edge */
   margin: 0 0 14px 0;
 }
+/* .st-card__header-content - REMOVED, not needed with grid */
 
-/* Left column: Stacks eyebrow â†’ title â†’ subtitle */
-.st-card__header-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 0; /* Allows text wrapping */
-}
-
-/* Eyebrow - small label above title */
+/* Eyebrow - row 1, column 1 */
 .st-card__eyebrow {
+  grid-column: 1;
+  grid-row: 1;
   font-family: 'Menlo', 'Monaco', monospace;
   font-size: 0.7rem;
   font-weight: 700;
@@ -339,7 +334,11 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   color: var(--st-color-accent, #FF69B4);
   margin: 0;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .st-card__eyebrow a {
   color: var(--st-color-accent, #FF69B4);
   text-decoration: none;
@@ -351,36 +350,53 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   text-decoration: underline;
 }
 
-.st-card__title{
+/* Title - row 2, full width */
+.st-card__title {
+  grid-column: 1 / -1; /* span both columns */
+  grid-row: 2;
   margin: 0;
   font-family: var(--wp--preset--font-family--playfair-display), serif;
   font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.1;
+  color: var(--st-card-border, #FF69B4); /* ensure title text color is set */
+  white-space: wrap; /* no wrap for short titles 
+  overflow: hidden;
+  text-overflow: ellipsis;*/
 }
 
-.st-card__title a{
-  color: var(--st-card-border);
+.st-card__title a {
+  color: inherit; /* match parent title color */
   text-decoration: none;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.10em;
 }
-.st-card__title a:hover{
-  color: var(--st-card-border);
+
+.st-card__title a:hover {
+  color: inherit; /* match parent title color */
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.10em;
 }
 
+/* Subtitle - row 3, full width */
 .st-card__subtitle,
-.st-card__subtitle a{
-  margin: 10px 0 0 0;
+.st-card__subtitle a {
+  grid-column: 1 / -1; /* span both columns */
+  grid-row: 3;
+  margin: 0;
   font-family: var(--wp--preset--font-family--fira-sans), sans-serif;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #666;
-  text-decoration: none;
+  font-size: 0.9rem;
+  color: var(--st-color-muted, #666);
+  white-space: nowrap; /* no wrap for short subtitles */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+.st-card__subtitle a:hover {
+  text-decoration: underline;
+}
+
 /* Content (main text, pushes footer down) */
 .st-card__content {
   font-size: 1rem;
@@ -402,7 +418,8 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   margin-bottom: 0;
 }
 
-.st-card__sup{
+.st-card__sup,
+sup{
   text-decoration: none;
   color: var(--st-card-border);
 }
@@ -429,33 +446,48 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 }
 
 /* Citation */
-.st-card__citation{
+.st-card__citation,
+cite{
   font-family: 'Menlo','Monaco', monospace;
   font-size: 0.7rem;
   color: #888;
   margin-bottom: 12px;
 }
 
-.st-card__citation a{
+.st-card__citation a,
+cite a{
   color: inherit;
   text-decoration: none;
 }
 
-.st-card__citation a:hover{
+.st-card__citation a:hover
+cite a:hover{
   text-decoration: underline;
 }
 
 
-
 /* =========================================
-   ST-LABEL: Metadata Labels
+   ST-LABEL: The Canonical Metadata Label
+   Usage: "Filter:", "Category:", "Start Here:"
    ========================================= */
-
 .st-label {
-  color: #999;
-  font-weight: 500;
-  white-space: nowrap;
-  flex-shrink: 0;
+    /* Typography: Matches the card headers exactly */
+    font-family: var(--wp--preset--font-family--fira-sans, sans-serif);
+    font-weight: 500;
+    font-size: 0.95rem; /* Readable, not tiny */
+    color: #999;       /* Muted gray */
+    
+    /* Layout */
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 8px; /* Consistent gap between label and content */
+    display: inline-block;
+}
+
+
+/* Reset margin if context handles gap (like flex rows) */
+.kg-filter-bar .st-label {
+    margin-right: 0; 
 }
 
 /* =========================================
@@ -563,7 +595,9 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 /* Badge - floats to upper right */
 .st-badge {
   flex-shrink: 0;
-  align-self: flex-start; /* Aligns to top of flex container */
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 0.7rem;
@@ -571,6 +605,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  align-self: end; /* ← CHANGED: was 'start' */
 }
 
 
@@ -732,7 +767,7 @@ h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption, p {
 
 /* Result count display */
 .gem-results-info {
-    margin-bottom: 24px;
+    margin: 24px 0;
     padding-bottom: 16px;
     border-bottom: 1px solid rgba(254, 18, 149, 0.15);
 }
@@ -1114,37 +1149,311 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
     box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
 }
 
-/* ==========================================================================
-   9. ARCHIVE & UTILITIES
-   ========================================================================== */
+/* ================================================
+   GEM ARCHIVE STYLES - v4 NEW LAYOUT
+   Add to: style.css (after existing styles)
+   ================================================ */
+
+/* Archive Header */
 .gem-archive {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
 }
-.archive-header { text-align: center; margin-bottom: 60px; }
-.archive-header h1 { font-size: 3rem; margin-bottom: 10px; }
+
+.archive-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.archive-header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: #0D1226;
+}
+
+.archive-header p {
+    font-size: 1.1rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* ================================================
+   FILTER ACTIVE NOTICE
+   ================================================ */
 
 .filter-active-notice {
-    background: var(--st-color-surface-alt);
-    border-left: 4px solid var(--st-color-accent);
+    background: #F8F8FA;
+    border-left: 4px solid #FF69B4;
     padding: 20px 30px;
+    margin-bottom: 40px;
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 40px;
+}
+
+.filter-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.filter-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FF69B4;
 }
 
 .clear-filter {
     margin-left: auto;
     padding: 6px 16px;
-    background: #fff;
-    border: 1px solid #ddd;
+    background: #FFF;
+    border: 1px solid #DDD;
     border-radius: 4px;
     color: #666;
     text-decoration: none;
     font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.clear-filter:hover {
+    background: #FF69B4;
+    color: #FFF;
+    border-color: #FF69B4;
+}
+
+/* ==========================================================================
+   COMPONENT: ST-CHIP (The Interactive Primitive)
+   Inherits DNA from .st-card__tag but adds interactive states.
+   ========================================================================== */
+
+.st-chip {
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    
+    /* Sugartown Token Inheritance (matches .st-card__tag) */
+    font-family: 'Menlo', 'Monaco', monospace; /* The "Terminal" aesthetic */
+    font-size: 0.75rem; 
+    line-height: 1.2;
+    padding: 0.5em 0.8em; /* Slightly larger touch target than static tags */
+    
+    /* Visuals: The "Sugartown Pink" Default */
+    background: rgba(254, 18, 149, 0.08); 
+    border: 1px solid rgba(254, 18, 149, 0.35);
+    border-radius: var(--st-radius-xs, 4px); /* Sharp corners, not pills */
+    color: #FE1295; /* var(--st-color-accent) */
+    
+    /* Interaction */
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+/* Hover State */
+.st-chip:hover {
+    background: rgba(254, 18, 149, 0.15);
+    border-color: #FE1295;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+}
+
+/* Active / Open State (for Dropdowns) */
+.st-chip[aria-expanded="true"],
+.st-chip.is-active {
+    background: #FE1295;
+    color: #fff;
+    border-color: #FE1295;
+    box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
+}
+
+/* Icon (The Caret) */
+.st-chip__icon {
+    font-size: 0.65em;
+    opacity: 0.8;
+    transition: transform 0.2s ease;
+}
+
+/* Rotate caret when open */
+.st-chip[aria-expanded="true"] .st-chip__icon {
+    transform: rotate(180deg);
+}
+
+/* Remove Button (for active filters) */
+.st-chip__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.1);
+    color: inherit;
+    font-size: 0.7em;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.st-chip__remove:hover {
+    background: rgba(0,0,0,0.2);
+}
+
+/* =========================================
+   UTILITY: CONTENT CONTAINER (800px)
+   ========================================= */
+.st-container {
+    width: 100%;
+    max-width: var(--wp--style--global--content-size, 800px);
+    margin: 0 auto; /* Center the container itself */
+    padding: 0 20px; /* Prevent edge collision on mobile */
+    box-sizing: border-box;
+}
+
+/* Ensure the filter bar stays left-aligned WITHIN this centered container */
+.kg-filter-bar.st-container {
+    display: flex; /* Maintain flex behavior */
+    justify-content: flex-start; /* Force left alignment */
+}
+
+/* =========================================
+   COMPONENT: CHIP ROW (Layout Primitive)
+   Usage: Filters, Start Here, Meta Lists
+   ========================================= */
+.st-chip-row {
+    display: flex;
+    flex-wrap: wrap;       /* specific wrap behavior */
+    align-items: center;   /* vertical centering */
+    gap: 12px;            /* canonical gap */
+    width: 100%;
+}
+
+/* Ensure labels inside a row have no extra margin (gap handles it) */
+.st-chip-row .st-label {
+    margin-right: 0;
+}
+
+/* =========================================
+   UPDATED: FILTER BAR (Behavior Only)
+   Layout is now handled by .st-chip-row
+   ========================================= */
+.kg-filter-bar {
+    /* Layout handled by .st-chip-row */
+    
+    /* Behavior / Context for Dropdowns */
+    position: relative;
+    z-index: 10; 
+    margin-bottom: 40px;
+}
+
+/* Mobile Dropdown Logic (Updates to target the specific filter bar) */
+@media (max-width: 768px) {
+    .kg-filter-bar .st-filter-group {
+        position: static; /* Dropdown anchor reset */
+    }
+}
+
+/* 2. The Dropdown Wrapper (The Anchor) */
+.st-filter-group {
+    position: relative; /* Anchors the absolute dropdown */
+}
+
+/* 3. The Dropdown Menu (The Floating Overlay) */
+.kg-filter-dropdown {
+    position: absolute;
+    top: calc(100% + 8px); /* 8px gap below chip */
+    left: 0;
+    z-index: 9999; /* Float OVER everything */
+    
+    background: #fff;
+    border: 1px solid rgba(254, 18, 149, 0.25);
+    border-radius: 8px;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.08),
+        0 12px 32px rgba(254, 18, 149, 0.12); /* Pink-tinted deep shadow */
+    
+    min-width: 240px;
+    padding: 8px 0;
+    
+    /* Animation (optional but nice) */
+    transform-origin: top left;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+/* Hidden state */
+.kg-filter-dropdown[hidden] {
+    display: block !important; /* Override UA style to allow transition */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px) scale(0.98);
+    pointer-events: none;
+}
+
+/* 4. Dropdown List Items */
+.kg-filter-dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Default: Single Column (like Project list) */
+    display: flex;
+    flex-direction: column; 
+}
+
+.kg-filter-dropdown__list li a {
+    display: block;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-family: 'Fira Sans', sans-serif; /* Readable UI font */
+    color: #444;
+    text-decoration: none;
+    transition: background 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kg-filter-dropdown__list li a:hover {
+    background: rgba(254, 18, 149, 0.06);
+    color: #FE1295;
+}
+
+/* 5. VARIANT: Multi-Column (Netflix "Genres" Style) 
+   Usage: <div class="kg-filter-dropdown kg-filter-dropdown--wide"> */
+.kg-filter-dropdown--wide {
+    min-width: 600px; /* Wide canvas */
+    padding: 16px;
+}
+
+.kg-filter-dropdown--wide .kg-filter-dropdown__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+    gap: 8px 16px; /* Row Gap | Col Gap */
+}
+
+.kg-filter-dropdown--wide li a {
+    border-radius: 4px; /* Hover looks like a pill in grid mode */
+}
+
+/* Mobile Fallback */
+@media (max-width: 768px) {
+    .kg-filter-bar {
+        flex-wrap: wrap; /* Allow wrapping on small screens */
+    }
+    
+    .kg-filter-dropdown--wide {
+        min-width: 300px;
+        max-width: 90vw;
+    }
+    
+    .kg-filter-dropdown--wide .kg-filter-dropdown__list {
+        grid-template-columns: repeat(2, 1fr); /* 2 cols on mobile */
+    }
 }
 
 /* ==========================================================================
@@ -1246,4 +1555,76 @@ footer.wp-block-template-part {
   .st-card__date {
     align-self: flex-end;
   }
+}
+
+
+/* =========================================
+   RESPONSIVE - Mobile Grid Stacking
+   ========================================= */
+
+@media (max-width: 768px) {
+  .st-card__header {
+    grid-template-columns: 1fr; /* single column */
+    align-items: start; /* reset to top alignment on mobile */
+  }
+  
+  .st-badge {
+    grid-column: 1;
+    grid-row: 2; /* badge moves below eyebrow */
+    justify-self: start;
+    align-self: start;
+  }
+  
+  .st-card__title {
+    grid-row: 3;
+    white-space: normal; /* allow wrapping on mobile */
+  }
+  
+  .st-card__subtitle {
+    grid-row: 4;
+    white-space: normal; /* allow wrapping on mobile */
+  }
+}
+
+/* =========================================
+   MOBILE FILTER FIX (Responsive Dropdowns)
+   ========================================= */
+@media (max-width: 768px) {
+    
+    /* 1. Re-anchor the dropdowns */
+    /* By removing 'relative' from the group, the absolute dropdown 
+       will look for the next parent: .kg-filter-bar */
+    .st-filter-group {
+        position: static; 
+    }
+
+    /* 2. Force dropdowns to fill the container width */
+    .kg-filter-dropdown {
+        left: 0;
+        right: 0;
+        width: 100%;
+        min-width: 0; /* Reset the desktop 600px constraint */
+        border-radius: 0 0 8px 8px; /* Square off top corners */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* 3. Mobile Grid: Single Column for readability */
+    /* We switch from 3 columns to 1 column so long names don't wrap awkwardly */
+    .kg-filter-dropdown--wide .kg-filter-dropdown__list {
+        grid-template-columns: 1fr; /* Stack vertically */
+        gap: 0;
+    }
+
+    /* 4. Fat Finger Targets */
+    /* Increase tap area size for mobile users */
+    .kg-filter-dropdown__list li a {
+        padding: 14px 16px; 
+        border-bottom: 1px solid rgba(0,0,0,0.05); /* visual separator */
+        font-size: 1rem; /* prevent iOS zoom on input focus */
+    }
+    
+    /* Optional: Remove last border */
+    .kg-filter-dropdown__list li:last-child a {
+        border-bottom: none;
+    }
 }

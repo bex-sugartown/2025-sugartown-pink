@@ -104,7 +104,62 @@ function gem_archive_url($param_name, $param_value) {
             <p>Topological content nodes • Not chronological blog posts</p>
         <?php endif; ?>
     </header>
-    
+   
+   <?php if (!$active_filter) : ?>
+    <section class="st-chip-row kg-filter-bar st-container">
+        <span class="st-label">Filter:</span>
+        
+        <a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" 
+           class="st-chip">
+           Browse All
+        </a>
+        
+        <div class="st-filter-group">
+            <button type="button"
+                    class="st-chip"
+                    data-filter-type="project"
+                    aria-expanded="false"
+                    aria-controls="dropdown-project">
+                Project
+                <span class="st-chip__icon">▼</span>
+            </button>
+            
+            <div class="kg-filter-dropdown" id="dropdown-project" hidden>
+                <ul class="kg-filter-dropdown__list">
+                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-001') ); ?>">PROJ-001: Sugartown CMS</a></li>
+                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-002') ); ?>">PROJ-002: Resume Factory</a></li>
+                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-003') ); ?>">PROJ-003: Design System</a></li>
+                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-004') ); ?>">PROJ-004: Viz Engine</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="st-filter-group">
+            <button type="button"
+                    class="st-chip"
+                    data-filter-type="topic"
+                    aria-expanded="false"
+                    aria-controls="dropdown-topic">
+                Topic
+                <span class="st-chip__icon">▼</span>
+            </button>
+            
+            <div class="kg-filter-dropdown kg-filter-dropdown--wide" id="dropdown-topic" hidden>
+                <ul class="kg-filter-dropdown__list">
+                    <?php
+                    $categories = get_categories(['taxonomy' => 'category', 'hide_empty' => true]);
+                    foreach ($categories as $cat) :
+                    ?>
+                        <li><a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>">
+                            <?php echo esc_html($cat->name); ?>
+                        </a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
     <?php
     // Treat any of these as "results mode"
     $filter_keys = array('project', 'category', 'wp_category', 'tag', 'wp_tag', 'status', 's'); // add more if you use them
@@ -205,44 +260,43 @@ function gem_archive_url($param_name, $param_value) {
                 $card_classes = 'st-card' . ( $is_dark ? ' st-card--dark' : '' );
             ?>
             
-            <article class="<?php echo esc_attr($card_classes); ?>"
+           <article class="<?php echo esc_attr($card_classes); ?>"
                      data-project="<?php echo esc_attr($project_id); ?>"
                      data-status="<?php echo esc_attr($gem_status); ?>">
 
                 
                 <!-- Header: Eyebrow/Title/Subtitle stack left, Badge floats right -->
                 <div class="st-card__header">
-                    <div class="st-card__header-content">
-                        <?php if ( $eyebrow ) : ?>
-                            <div class="st-card__eyebrow">
-                                <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>">
-                                    <?php echo esc_html($eyebrow); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <h2 class="st-card__title">
-                            <a href="<?php the_permalink(); ?>">
-                                <?php the_title(); ?>
+                    <?php if ( $eyebrow ) : ?>
+                        <div class="st-card__eyebrow">
+                            <a href="<?php echo esc_url( gem_archive_url('project', $project_id) ); ?>">
+                                <?php echo esc_html($eyebrow); ?>
                             </a>
-                        </h2>
-                        
-                        <?php if ( $subtitle ) : ?>
-                            <div class="st-card__subtitle">
-                                <span class="st-label">Category:</span>
-                                <a href="<?php echo esc_url($subtitle_url); ?>">
-                                    <?php echo esc_html($subtitle); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        </div>
+                    <?php endif; ?>
                     
                     <?php if ( $gem_status ) : ?>
                         <span class="st-badge st-badge--<?php echo esc_attr($status_class); ?>">
                             <?php echo esc_html($gem_status); ?>
                         </span>
                     <?php endif; ?>
+                    
+                    <h2 class="st-card__title">
+                        <a href="<?php the_permalink(); ?>">
+                            <?php the_title(); ?>
+                        </a>
+                    </h2>
+                    
+                    <?php if ( $subtitle ) : ?>
+                        <div class="st-card__subtitle">
+                            <span class="st-label">Category:</span>
+                            <a href="<?php echo esc_url($subtitle_url); ?>">
+                                <?php echo esc_html($subtitle); ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
                 </div>
+
                 
                 <!-- Body: Tags -->
                 <div class="st-card__body">
@@ -276,6 +330,7 @@ function gem_archive_url($param_name, $param_value) {
                 </div>
                 
             </article>
+            
             
             <?php endwhile; ?>
             <?php wp_reset_postdata(); ?>
