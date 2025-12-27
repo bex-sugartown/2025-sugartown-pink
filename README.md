@@ -456,7 +456,6 @@ if (gem has matching tag) {
 
 **Design Intent:**
 Dark cards signal meta-level, architectural, or system-focused content. They provide visual hierarchy and content categorization at a glance.
-```
 
 ---
 
