@@ -404,59 +404,73 @@ These rules are intended to change **slowly** and may be referenced by:
 
 ---
 
-## A.1 Canonical Card Contract <a id="contract-st-card"></a>
+## A.1 Canonical Card Contract (`st-card`) <a id="contract-st-card"></a>
 
-### `st-card`
+The `st-card` is the atomic unit of the Sugartown Knowledge Graph. It is a strictly controlled container that enforces content hierarchy regardless of content length.
 
-`st-card` is the **single canonical card primitive** for Sugartown.
+**Status:** Stable (v3.3.3)
+**Implementation:** `style.css` (Section 5.0)
 
-All card-based surfaces—including:
-- homepage grids
-- archive views
-- search results
-- featured collections
+### 1. Anatomy & DOM Structure
+The card uses a `flex-column` layout with a nested `CSS Grid` header to prevent layout collision between metadata and status badges.
 
-**must** use the `st-card` structure and tokens.
+```html
+<article class="st-card [st-card--dark]">
+  <div class="st-card__bg"></div>
 
-### Required Structure
+  <div class="st-card__inner">
+    
+    <header class="st-card__header">
+      <div class="st-card__eyebrow">Project ID</div>  <div class="st-badge">Status</div>              <h2 class="st-card__title">Title</h2>           <div class="st-card__subtitle">Category</div>   </header>
 
-```text
-.st-card
-  ├─ .st-card__bg        (optional)
-  ├─ .st-card__inner
-      ├─ .st-card__header
-      ├─ .st-card__content
-      ├─ .st-card__footer
-      ├─ .st-card__tags
-      └─ .st-card__media
+    <div class="st-card__content">
+      <p>Excerpt or Description...</p>
+      </div>
+
+    <footer class="st-card__footer">
+      <div class="st-card__action">Next Step</div>    <time class="st-card__date">YYYY-MM-DD</time>   </footer>
+
+  </div>
+</article>
 ```
 
-Header/footer pinning, spacing, and z-index behavior are defined by the component
-contract and must not be overridden per surface.
+### 2. Layout Behavior (The "Split" Contract)
+To ensure visual alignment across a grid of uneven content:
 
-**Variants:**
-- `.st-card` (default, light)
-- `.st-card--dark` (automatic, tag-triggered)
+1.  **Height:** Always `100%` of grid cell.
+2.  **Pinning:** `.st-card__inner` uses `flex: 1 1 auto` to fill available space.
+3.  **Footer:** `.st-card__footer` uses `margin-top: auto` to aggressively push to the bottom edge.
+4.  **Header:** Uses `grid-template-columns: 1fr auto` to ensure the Badge never overlaps the Eyebrow.
 
-**Dark Trigger Tags:**
-Cards automatically receive `.st-card--dark` class when they include any of these tag slugs:
-- `system`
-- `meta`
-- `architecture`
-- `dx`
+### 3. Token Mapping (The "Pink" Contract)
+Visual properties must reference system tokens, not hardcoded hex values.
 
-**Usage:**
-```php
-// Archive template automatically applies dark class
-$dark_trigger_slugs = array('system', 'meta', 'architecture', 'dx');
-if (gem has matching tag) {
-    $card_classes .= ' st-card--dark';
-}
-```
+| Property | Token / Rule | Context |
+| :--- | :--- | :--- |
+| **Border** | `1px solid var(--st-card-border)` | Restored in v3.3.3 |
+| **Radius** | `var(--st-radius-md)` (12px) | Standard card curvature |
+| **Shadow** | `var(--st-shadow-card)` | Pink-tinted elevation |
+| **Font (Eyebrow)** | `'Menlo', monospace` | Terminal aesthetic |
+| **Font (Title)** | `Playfair Display` | Editorial aesthetic |
 
-**Design Intent:**
-Dark cards signal meta-level, architectural, or system-focused content. They provide visual hierarchy and content categorization at a glance.
+### 4. Variants & Logic
 
+#### Light Variant (Default)
+* **Background:** `var(--st-color-surface)` (#fff)
+* **Text:** `var(--st-color-text)` (#1e1e1e)
+* **Border:** `#FE1295` (Primary Brand)
+
+#### Dark Variant (`.st-card--dark`)
+* **Trigger:** System logic applies this class if tags include: `system`, `meta`, `architecture`, `dx`.
+* **Background:** `#0f1117` (Void)
+* **Text:** `rgba(230,232,238,0.72)` (Muted Cool White)
+* **Tags:** Inverted "Terminal" style (transparent bg + pink border).
+
+### 5. Interaction States
+* **Hover:** `transform: translateY(-4px)` + Enhanced Shadow.
+* **Click Target:** The title link (`st-card__title a`) should be the primary interaction.
+* **Tags:** Individual tags (`st-card__tag`) remain clickable and independent of the card link.
+  
 ---
 
 ## A.2 Grid Contract <a id="contract-grid"></a>
@@ -550,6 +564,34 @@ This rule applies to:
 - Archive introductions
 - Feature explanations
 - Any prose longer than UI microcopy
+
+---
+
+## CSS Architecture Rules for AI Assistants
+
+### Before Writing Any CSS:
+
+1. **Check if DS component exists:** Search `style.css` for `.ds-*` classes
+2. **Use tokens, never hardcode:** Every value must be `var(--ds-*)`
+3. **Semantic naming only:** `.ds-metadata` not `.ethics-metadata`
+4. **10-line rule:** If page CSS >10 lines, you're doing it wrong
+5. **Ask first:** "Should this be added to the design system?"
+
+### Response Template:
+
+When user asks for page styling:
+
+1. First, identify which DS components to use
+2. If component missing, propose adding it to DS (not page CSS)
+3. Show HTML using DS classes
+4. Show minimal page CSS (if any)
+5. Flag if approach violates DS principles
+
+### Red Flags:
+- Creating `.page-specific-thing` classes
+- Hardcoded `#hex` colors or `px` values
+- Duplicating existing DS patterns
+- Page CSS >10 lines
 
 ---
 
