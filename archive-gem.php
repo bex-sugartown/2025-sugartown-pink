@@ -106,58 +106,94 @@ function gem_archive_url($param_name, $param_value) {
     </header>
    
    <?php if (!$active_filter) : ?>
-    <section class="st-chip-row kg-filter-bar st-container">
+    <section class="st-chips st-chips--center st-container" role="navigation" aria-label="Gem filters">
+
         <span class="st-label">Filter:</span>
-        
-        <a href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>" 
-           class="st-chip">
-           Browse All
+
+        <!-- Browse all -->
+        <a
+            href="<?php echo esc_url( add_query_arg('post_type', 'gem', home_url('/')) ); ?>"
+            class="st-chip">
+            Browse All
         </a>
-        
-        <div class="st-filter-group">
-            <button type="button"
-                    class="st-chip"
-                    data-filter-type="project"
-                    aria-expanded="false"
-                    aria-controls="dropdown-project">
-                Project
-                <span class="st-chip__icon">▼</span>
+
+        <!-- Project filter -->
+        <div class="kg-filter">
+            <button
+            type="button"
+            class="st-chip"
+            data-filter-type="project"
+            aria-expanded="false"
+            aria-controls="dropdown-project"
+            >
+            Project
+            <span class="st-chip__icon" aria-hidden="true">▼</span>
             </button>
-            
+
             <div class="kg-filter-dropdown" id="dropdown-project" hidden>
-                <ul class="kg-filter-dropdown__list">
-                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-001') ); ?>">PROJ-001: Sugartown CMS</a></li>
-                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-002') ); ?>">PROJ-002: Resume Factory</a></li>
-                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-003') ); ?>">PROJ-003: Design System</a></li>
-                     <li><a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-004') ); ?>">PROJ-004: Viz Engine</a></li>
-                </ul>
+            <ul class="kg-filter-dropdown__list">
+                <li>
+                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-001') ); ?>">
+                    PROJ-001: Sugartown CMS
+                </a>
+                </li>
+                <li>
+                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-002') ); ?>">
+                    PROJ-002: Resume Factory
+                </a>
+                </li>
+                <li>
+                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-003') ); ?>">
+                    PROJ-003: Design System
+                </a>
+                </li>
+                <li>
+                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-004') ); ?>">
+                    PROJ-004: Viz Engine
+                </a>
+                </li>
+            </ul>
             </div>
         </div>
-        
-        <div class="st-filter-group">
-            <button type="button"
-                    class="st-chip"
-                    data-filter-type="topic"
-                    aria-expanded="false"
-                    aria-controls="dropdown-topic">
-                Topic
-                <span class="st-chip__icon">▼</span>
+
+        <!-- Topic filter -->
+        <div class="kg-filter">
+            <button
+            type="button"
+            class="st-chip"
+            data-filter-type="topic"
+            aria-expanded="false"
+            aria-controls="dropdown-topic"
+            >
+            Topic
+            <span class="st-chip__icon" aria-hidden="true">▼</span>
             </button>
-            
+
             <div class="kg-filter-dropdown kg-filter-dropdown--wide" id="dropdown-topic" hidden>
-                <ul class="kg-filter-dropdown__list">
-                    <?php
-                    $categories = get_categories(['taxonomy' => 'category', 'hide_empty' => true]);
-                    foreach ($categories as $cat) :
-                    ?>
-                        <li><a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>">
-                            <?php echo esc_html($cat->name); ?>
-                        </a></li>
-                    <?php endforeach; ?>
-                </ul>
+            <ul class="kg-filter-dropdown__list">
+                <?php
+                $categories = get_categories([
+                'taxonomy'   => 'category',
+                'hide_empty' => true,
+                ]);
+
+                foreach ($categories as $cat) :
+                ?>
+                <li>
+                    <a
+                    class="st-chip"
+                    href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>"
+                    >
+                    <?php echo esc_html($cat->name); ?>
+                    </a>
+                </li>
+                <?php endforeach; ?>
+            </ul>
             </div>
         </div>
+
     </section>
+
     <?php endif; ?>
 
     <?php
@@ -303,15 +339,16 @@ function gem_archive_url($param_name, $param_value) {
                     <?php if ( $tags ) : ?>
                         <div class="st-card__meta">
                             <span class="st-label">Tags:</span>
-                            <div class="st-card__tags">
-                                <?php foreach ( $tags as $tag ) : ?>
-                                    <a href="<?php echo esc_url( gem_archive_url('wp_tag', $tag->term_id) ); ?>" 
-                                       class="st-card__tag">
+
+                                <div class="st-chips" role="list">
+                                    <?php foreach ( $tags as $tag ) : ?>
+                                    <a href="<?php echo esc_url( gem_archive_url('wp_tag', $tag->term_id) ); ?>"
+                                        class="st-chip">
                                         <?php echo esc_html( $tag->name ); ?>
                                     </a>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
                     <?php endif; ?>
                 </div>
                 

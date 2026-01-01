@@ -443,3 +443,133 @@ function sugartown_enqueue_kg_filters() {
     }
 }
 add_action('wp_enqueue_scripts', 'sugartown_enqueue_kg_filters');
+
+/* =========================================================
+   GEM: Metadata under title (clickable where appropriate)
+   ========================================================= */
+
+if ( ! function_exists('sugartown_gem_archive_url') ) {
+  function sugartown_gem_archive_url($param_name, $param_value) {
+    $base = get_post_type_archive_link('gem'); // e.g. /knowledge-graph/
+    return add_query_arg(array($param_name => $param_value), $base);
+  }
+}
+
+if ( ! function_exists('sugartown_render_gem_metadata_dl') ) {
+  function sugartown_render_gem_metadata_dl($post_id) {
+    if ( ! $post_id ) return '';
+
+    $project_id  = get_post_meta($post_id, 'gem_related_project', true);
+    $gem_status  = get_post_meta($post_id, 'gem_status', true);
+    $action_item = get_post_meta($post_id, 'gem_action_item', true);
+
+    $project_name = '';
+    if ( $project_id && function_exists('sugartown_get_project_name') ) {
+      $project_name = sugartown_get_project_name($project_id);
+    }
+
+    $cats = get_the_category($post_id);
+    $primary_cat = ( $cats && ! empty($cats) ) ? $cats[0] : null;
+
+    $tags = get_the_tags($post_id);
+
+    $date_iso   = get_the_date('c', $post_id);
+    $date_human = get_the_date('F j, Y', $post_id);
+
+    $rows = array();
+
+    /* Project (filterable) */
+    if ( $project_id ) {
+      $label = $project_id;
+      if ( $project_name && $project_name !== $project_id ) {
+        $label .= ' • ' . $project_name;
+      }
+      $rows[] = array(
+        'dt' => 'Project',
+        'dd' => '<a href="' . esc_url( sugartown_gem_archive_url('project', $project_id) ) . '">' . esc_html($label) . '</a>'
+      );
+    }
+
+    /* Status (filterable enum) */
+    if ( $gem_status ) {
+      $rows[] = array(
+        'dt' => 'Status',
+        'dd' => '<a href="' . esc_url( sugartown_gem_archive_url('status', $gem_status) ) . '">' . esc_html($gem_status) . '</a>'
+      );
+    }
+
+    /* Next step (open text — NOT filterable) */
+    if ( $action_item ) {
+      $rows[] = array(
+        'dt' => 'Next step',
+        'dd' => esc_html($action_item)
+      );
+    }
+
+    /* Category (filterable) */
+    if ( $primary_cat ) {
+      $rows[] = array(
+        'dt' => 'Category',
+        'dd' => '<a href="' . esc_url( sugartown_gem_archive_url('wp_category', $primary_cat->term_id) ) . '">' . esc_html($primary_cat->name) . '</a>'
+      );
+    }
+
+   /* Tags (filterable, rendered as st-chips) */
+if ( $tags && ! is_wp_error($tags) ) {
+  $chips = array();
+
+  foreach ( $tags as $t ) {
+    $chips[] =
+      '<a class="st-chip" href="' .
+      esc_url( sugartown_gem_archive_url('wp_tag', $t->term_id) ) .
+      '">' . esc_html($t->name) . '</a>';
+  }
+
+  $rows[] = array(
+    'dt' => 'Tags',
+    'dd' => '<div class="st-chips" role="list">' . implode('', $chips) . '</div>'
+  );
+}
+
+    /* Date (informational) */
+    $rows[] = array(
+      'dt' => 'Date',
+      'dd' => '<time datetime="' . esc_attr($date_iso) . '">' . esc_html($date_human) . '</time>'
+    );
+
+    if ( empty($rows) ) return '';
+
+    $out  = '<dl class="st-metadata st-metadata--gem" aria-label="Gem metadata">';
+    foreach ( $rows as $r ) {
+      $out .= '<dt>' . esc_html($r['dt']) . '</dt>';
+      $out .= '<dd>' . $r['dd'] . '</dd>';
+    }
+    $out .= '</dl>';
+
+    return $out;
+  }
+}
+
+/* Inject directly after the post title block */
+add_filter('render_block', function($block_content, $block) {
+  if ( ! is_singular('gem') ) return $block_content;
+  if ( empty($block['blockName']) || $block['blockName'] !== 'core/post-title' ) return $block_content;
+
+  return $block_content . sugartown_render_gem_metadata_dl( get_the_ID() );
+}, 10, 2);
+
+/* =========================================================
+   GEM: Remove bottom Post Terms block (categories/tags) on single gems
+   ========================================================= */
+
+add_filter('render_block', function($block_content, $block) {
+  if ( ! is_singular('gem') ) return $block_content;
+  if ( empty($block['blockName']) ) return $block_content;
+
+  // Removes the bottom "Categories / Tags" block output
+  if ( $block['blockName'] === 'core/post-terms' ) {
+    return '';
+  }
+
+  return $block_content;
+}, 12, 2);
