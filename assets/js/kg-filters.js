@@ -53,17 +53,17 @@
   }
   
   function handleOutsideClick(e) {
-    if (!e.target.closest('[data-filter-type]') && 
-        !e.target.closest('.kg-filter-dropdown')) {
+    if (!e.target.closest('[data-filter-type]') &&
+        !e.target.closest('.st-filter__dropdown')) {
       closeAllDropdowns();
     }
   }
-  
+
   function closeAllDropdowns() {
-    document.querySelectorAll('.kg-filter-dropdown').forEach(d => {
+    document.querySelectorAll('.st-filter__dropdown').forEach(d => {
       d.hidden = true;
     });
-    
+
     document.querySelectorAll('[data-filter-type]').forEach(b => {
       b.setAttribute('aria-expanded', 'false');
     });

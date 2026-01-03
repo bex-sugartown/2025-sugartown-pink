@@ -118,37 +118,37 @@ function gem_archive_url($param_name, $param_value) {
         </a>
 
         <!-- Project filter -->
-        <div class="kg-filter">
+        <div class="st-filter">
             <button
             type="button"
-            class="st-chip"
+            class="st-filter__toggle"
             data-filter-type="project"
             aria-expanded="false"
             aria-controls="dropdown-project"
             >
             Project
-            <span class="st-chip__icon" aria-hidden="true">▼</span>
+            <span class="st-filter__icon" aria-hidden="true">▼</span>
             </button>
 
-            <div class="kg-filter-dropdown" id="dropdown-project" hidden>
-            <ul class="kg-filter-dropdown__list">
-                <li>
-                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-001') ); ?>">
+            <div class="st-filter__dropdown" id="dropdown-project" hidden>
+            <ul class="st-filter__menu">
+                <li class="st-filter__item">
+                <a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-001') ); ?>">
                     PROJ-001: Sugartown CMS
                 </a>
                 </li>
-                <li>
-                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-002') ); ?>">
+                <li class="st-filter__item">
+                <a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-002') ); ?>">
                     PROJ-002: Resume Factory
                 </a>
                 </li>
-                <li>
-                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-003') ); ?>">
+                <li class="st-filter__item">
+                <a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-003') ); ?>">
                     PROJ-003: Design System
                 </a>
                 </li>
-                <li>
-                <a class="st-chip" href="<?php echo esc_url( gem_archive_url('project', 'PROJ-004') ); ?>">
+                <li class="st-filter__item">
+                <a href="<?php echo esc_url( gem_archive_url('project', 'PROJ-004') ); ?>">
                     PROJ-004: Viz Engine
                 </a>
                 </li>
@@ -157,20 +157,20 @@ function gem_archive_url($param_name, $param_value) {
         </div>
 
         <!-- Topic filter -->
-        <div class="kg-filter">
+        <div class="st-filter">
             <button
             type="button"
-            class="st-chip"
+            class="st-filter__toggle"
             data-filter-type="topic"
             aria-expanded="false"
             aria-controls="dropdown-topic"
             >
             Topic
-            <span class="st-chip__icon" aria-hidden="true">▼</span>
+            <span class="st-filter__icon" aria-hidden="true">▼</span>
             </button>
 
-            <div class="kg-filter-dropdown kg-filter-dropdown--wide" id="dropdown-topic" hidden>
-            <ul class="kg-filter-dropdown__list">
+            <div class="st-filter__dropdown st-filter__dropdown--wide st-filter__dropdown--grid" id="dropdown-topic" hidden>
+            <ul class="st-filter__menu">
                 <?php
                 $categories = get_categories([
                 'taxonomy'   => 'category',
@@ -179,11 +179,8 @@ function gem_archive_url($param_name, $param_value) {
 
                 foreach ($categories as $cat) :
                 ?>
-                <li>
-                    <a
-                    class="st-chip"
-                    href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>"
-                    >
+                <li class="st-filter__item">
+                    <a href="<?php echo esc_url( gem_archive_url('wp_category', $cat->term_id) ); ?>">
                     <?php echo esc_html($cat->name); ?>
                     </a>
                 </li>

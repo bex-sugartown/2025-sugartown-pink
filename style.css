@@ -139,9 +139,12 @@ Rules
   --st-line-height-normal: 1.5;
   --st-line-height-relaxed: 1.75;
 
-  /* Font stacks */
-  --st-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --st-font-mono: "Menlo", "Monaco", "SF Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  /* Font stacks (Typography tokens with WordPress preset bridge) */
+  --st-font-sans: var(--wp--preset--font-family--fira-sans, "Fira Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --st-font-serif: var(--wp--preset--font-family--playfair, "Playfair", Georgia, "Times New Roman", Times, serif);
+  --st-font-display: var(--wp--preset--font-family--playfair-display, var(--st-font-serif));
+  --st-font-display-sc: var(--wp--preset--font-family--playfair-display-sc, var(--st-font-display));
+  --st-font-mono: var(--wp--preset--font-family--mono, "Menlo", "Monaco", "SF Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace);
 
   /* Radius (NOTE: keep existing system values; add aliases, not overrides) */
   --st-radius-xs: 4px;     /* buttons, tags */
@@ -259,9 +262,19 @@ Rules
    Platform-agnostic styling for clean semantic HTML.
    ================================================== */
 
-/* Typography */
-body {
+/* Typography — Unified Font Family Application */
+html, body, button, input, select, textarea {
   font-family: var(--st-font-sans);
+}
+
+h1 { font-family: var(--st-font-display-sc); }
+h2, h3 { font-family: var(--st-font-display); }
+h4, h5, h6 { font-family: var(--st-font-serif); }
+pre, code, kbd, samp { font-family: var(--st-font-mono); }
+blockquote, caption, figcaption, p { font-family: var(--st-font-sans); }
+
+/* Base styles */
+body {
   color: var(--st-color-text);
   background: var(--st-color-surface);
   line-height: 1.5;
@@ -453,7 +466,7 @@ input[type="button"],
   border-radius: var(--st-radius-xs);
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-weight: 700;
+  font-weight: 400;
   transition: all 0.2s ease;
   background-color: var(--st-color-accent);
   color: #fff;
@@ -787,9 +800,8 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
   z-index: -1;            /* key change */
 }
 
-/* Ensure “HUD” elements are always above the grid BG bleed */
+/* Ensure "HUD" elements are always above the grid BG bleed */
 .gem-results-info,
-.kg-filter-bar,
 .archive-header,
 .kg-intro {
   position: relative;
@@ -1088,10 +1100,6 @@ cite a:hover{
 }
 
 
-/* Reset margin if context handles gap (like flex rows) */
-.kg-filter-bar .st-label {
-    margin-right: 0; 
-}
 
 /* =========================================
    ST-LINK: Metadata Links
@@ -1403,28 +1411,13 @@ main#primary.site-main {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 
-  /* Subtle lift, not a border */
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+  /* Clean white surface - no shadow */
+  box-shadow: none !important;
 
   text-align: center;
 }
 
 
-/* Active filter state (top pink bar) */
-.kg-active-filter,
-.kg-filter-state {
-  max-width: 70ch;
-  margin: var(--st-spacing-4, 24px) auto;
-  padding: 14px 16px;
-
-  background: rgba(254, 18, 149, 0.06);
-  border: none;
-  border-radius: var(--st-radius-sm, 6px);
-
-  text-align: center;
-}
 
 
 /* The grid should also be above the background */
@@ -1738,25 +1731,11 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
   pointer-events: none;
 }
 
-/* 3) Put *all actual content* above it */
-.gem-archive > *,
-.gem-archive-header,
-.kg-filter-bar,
-.kg-intro,
-.gem-results-info,
-.st-grid,
-.gem-pagination {
-  position: relative;
-  z-index: 2;
-}
-
-/* 4) Your results pill stays a “HUD surface” */
+/* 4) Your results pill stays a "HUD surface" */
 .gem-results-info {
   background: #fff;
   border-radius: var(--st-radius-sm, 6px);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: none !important; /* Clean white surface - no shadow */
 }
 
 
@@ -1779,6 +1758,18 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Normalize top bar chip/button heights so "Browse All" aligns with dropdown buttons
+   -------------------------------------------------------------------------- */
+.st-chips .st-chip,
+.st-chips button.st-chip {
+  box-sizing: border-box;
+  min-height: 28px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Canonical chip */
@@ -1824,6 +1815,80 @@ a.st-chip:hover {
   box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
 }
 
+/* ==========================================================================
+   ST-FILTER (Clickable Filter Chip — matches st-chip exactly)
+   ========================================================================== */
+
+
+a.st-filter,
+button.st-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--st-font-mono, "Menlo", "Monaco", monospace);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+
+  padding: 0.45em 0.75em;
+  border-radius: var(--st-radius-xs, 4px);
+
+  background: rgba(254, 18, 149, 0.08);
+  border: 1px solid rgba(254, 18, 149, 0.35);
+  color: var(--st-color-accent, #FE1295);
+
+  cursor: pointer;
+  user-select: none;
+
+  text-decoration: none !important;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.st-filter:hover,
+a.st-filter:hover,
+button.st-filter:hover {
+  transform: translateY(-1px);
+  background: rgba(254, 18, 149, 0.15);
+  border-color: var(--st-color-accent, #FE1295);
+  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+}
+
+.st-filter.is-active,
+.st-filter[aria-expanded="true"] {
+  background: var(--st-color-accent, #FE1295);
+  border-color: var(--st-color-accent, #FE1295);
+  color: #fff;
+  box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
+}
+
+/* ==========================================================================
+   SEE ST-CHIPS --- ST-CHIP-ROW (Flex Container for Filter Bars)
+   ========================================================================== */
+
+.st-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.st-chip-row--center {
+  justify-content: center;
+}
+
+.st-chip-row--start {
+  justify-content: flex-start;
+}
+
+.st-chip-row--end {
+  justify-content: flex-end;
+}
 
 
 /* Map legacy tag classes to chip look (until markup is refactored) */
@@ -1855,6 +1920,223 @@ a.st-chip:hover {
 }
 
 
+/* ==========================================================================
+   COMPONENT: ST-FILTER (Filter Dropdown System)
+   Standalone filter component with dropdown menu - NOT based on st-chip
+   Usage: Filter bars, taxonomy selectors, multi-option pickers
+   ========================================================================== */
+
+/* Filter Container (Wrapper for toggle + dropdown) */
+.st-filter {
+  position: relative;
+  display: inline-block;
+  z-index: 100; /* Ensure dropdown parent can stack above cards */
+}
+
+/* Filter Toggle Button */
+.st-filter__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--st-font-mono, "Menlo", "Monaco", monospace);
+  font-size: 0.75rem;
+  line-height: 1.2;
+
+  padding: 0.45em 0.75em;
+  border-radius: var(--st-radius-xs, 4px);
+
+  background: rgba(254, 18, 149, 0.08);
+  border: 1px solid rgba(254, 18, 149, 0.35);
+  color: var(--st-color-accent, #FE1295);
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.st-filter__toggle:hover {
+  transform: translateY(-1px);
+  background: rgba(254, 18, 149, 0.15);
+  border-color: var(--st-color-accent, #FE1295);
+  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+}
+
+.st-filter__toggle:focus {
+  outline: 2px solid var(--st-color-accent, #FE1295);
+  outline-offset: 2px;
+}
+
+/* Active/Open State */
+.st-filter__toggle[aria-expanded="true"] {
+  background: var(--st-color-accent, #FE1295);
+  border-color: var(--st-color-accent, #FE1295);
+  color: #fff;
+  box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
+}
+
+/* Toggle Icon (Chevron) */
+.st-filter__icon {
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+}
+
+.st-filter__toggle[aria-expanded="true"] .st-filter__icon {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu Container */
+.st-filter__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 100000; /* Very high z-index to appear above callouts and cards */
+
+  min-width: 220px;
+  max-width: 400px;
+
+  background: transparent; /* Transparent wrapper - menu provides background */
+  border: none;
+  border-radius: 0;
+  box-shadow: none; /* Shadow on menu instead */
+
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  transform-origin: top left;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+/* Hidden State */
+.st-filter__dropdown[hidden] {
+  display: block !important;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px) scale(0.98);
+  pointer-events: none;
+}
+
+/* Dropdown Menu List */
+.st-filter__menu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0; /* Vertical padding for spacing */
+  max-height: 400px;
+  overflow-y: auto;
+
+  /* Menu provides the actual visual container */
+  background: var(--st-color-surface-primary);
+  border-radius: var(--st-radius-sm, 8px);
+  border: 1px solid var(--st-color-gray-400);
+  box-shadow:
+    0 2px 12px var(--st-color-gray-300);
+}
+
+/* Menu Item */
+.st-filter__item {
+  margin: 0;
+  padding: 0;
+}
+
+.st-filter__item a {
+  display: block;
+  padding: 10px 16px;
+
+  font-family: var(--st-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #444;
+
+  text-decoration: none;
+  text-transform: none; /* Match st-chip - no uppercase */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.st-filter__item a:hover {
+  background: rgba(254, 18, 149, 0.06);
+  color: #FE1295;
+}
+
+.st-filter__item a:focus {
+  outline: 2px solid var(--st-color-accent, #FE1295);
+  outline-offset: -2px;
+  background: rgba(254, 18, 149, 0.06);
+}
+
+/* Round corners on first and last items to match menu border-radius */
+.st-filter__item:first-child a {
+  border-radius: 0 0;
+}
+
+.st-filter__item:last-child a {
+  border-radius: 0 0;
+}
+
+/* Grid Layout Modifier (for long lists) */
+.st-filter__dropdown--grid .st-filter__menu {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 16px;
+  padding: 0px;
+}
+
+.st-filter__dropdown--grid .st-filter__item a {
+  padding: 8px 12px;
+  white-space: normal;
+}
+
+/* Wide Dropdown Modifier */
+.st-filter__dropdown--wide {
+  min-width: 600px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  /* Re-anchor dropdowns to parent container on mobile */
+  .st-filter {
+    position: static;
+  }
+
+  .st-filter__dropdown {
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    border-radius: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+
+  /* Single column grid on mobile */
+  .st-filter__dropdown--grid .st-filter__menu {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 8px 0;
+  }
+
+  .st-filter__dropdown--grid .st-filter__item a {
+    padding: 14px 16px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .st-filter__dropdown--grid .st-filter__item:last-child a {
+    border-bottom: none;
+  }
+
+  /* Fat finger targets for mobile */
+  .st-filter__item a {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+}
+
+
 /* =========================================
    UTILITY: CONTENT CONTAINER (800px)
    ========================================= */
@@ -1866,11 +2148,6 @@ a.st-chip:hover {
     box-sizing: border-box;
 }
 
-/* Ensure the filter bar stays left-aligned WITHIN this centered container */
-.kg-filter-bar.st-container {
-    display: flex; /* Maintain flex behavior */
-    justify-content: flex-start; /* Force left alignment */
-}
 
 
 /* =========================================
@@ -1950,11 +2227,12 @@ a.st-chip:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-radius: 0; /* No border-radius for full edge-to-edge fill */
 }
 
 .kg-filter-dropdown__list li a:hover {
-    background: rgba(254, 18, 149, 0.06);
-    color: #FE1295;
+    background: #FFB3D9; /* Light pink, 100% opacity, full edge-to-edge */
+    color: #444; /* Text remains readable with sufficient contrast */
 }
 
 /* 5. VARIANT: Multi-Column (Netflix "Genres" Style) 
@@ -1971,7 +2249,7 @@ a.st-chip:hover {
 }
 
 .kg-filter-dropdown--wide li a {
-    border-radius: 4px; /* Hover looks like a pill in grid mode */
+    border-radius: 0; /* No border-radius for full edge-to-edge fill */
 }
 
 /* Mobile Fallback */
@@ -2120,49 +2398,6 @@ footer.wp-block-template-part {
     grid-row: 4;
     white-space: normal; /* allow wrapping on mobile */
   }
-}
-
-/* =========================================
-   MOBILE FILTER FIX (Responsive Dropdowns)
-   ========================================= */
-@media (max-width: 768px) {
-    
-    /* 1. Re-anchor the dropdowns */
-    /* By removing 'relative' from the group, the absolute dropdown 
-       will look for the next parent: .kg-filter-bar */
-    .st-filter-group {
-        position: static; 
-    }
-
-    /* 2. Force dropdowns to fill the container width */
-    .kg-filter-dropdown {
-        left: 0;
-        right: 0;
-        width: 100%;
-        min-width: 0; /* Reset the desktop 600px constraint */
-        border-radius: 0 0 8px 8px; /* Square off top corners */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    
-    /* 3. Mobile Grid: Single Column for readability */
-    /* We switch from 3 columns to 1 column so long names don't wrap awkwardly */
-    .kg-filter-dropdown--wide .kg-filter-dropdown__list {
-        grid-template-columns: 1fr; /* Stack vertically */
-        gap: 0;
-    }
-
-    /* 4. Fat Finger Targets */
-    /* Increase tap area size for mobile users */
-    .kg-filter-dropdown__list li a {
-        padding: 14px 16px; 
-        border-bottom: 1px solid rgba(0,0,0,0.05); /* visual separator */
-        font-size: 1rem; /* prevent iOS zoom on input focus */
-    }
-    
-    /* Optional: Remove last border */
-    .kg-filter-dropdown__list li:last-child a {
-        border-bottom: none;
-    }
 }
 
 /* ==========================================================================
@@ -2514,33 +2749,32 @@ footer.wp-block-template-part {
 
 /* 3) HUD/controls always above the grid AND its oversized ::before */
 .gem-results-info,
-.kg-filter-bar,
-.kg-active-filter,
-.kg-filter-state,
 .archive-header,
 .archive-header p {
   position: relative;
   z-index: 10 !important;
 }
 
-/* 4) Results bar: readable, “recessive”, not a border-heavy pill */
+/* 4) Results bar: readable, "recessive", not a border-heavy pill */
 .gem-results-info {
   max-width: 70ch;
   margin: var(--st-spacing-4, 24px) auto;
   padding: 12px 16px;
 
-  background: rgba(255,255,255,0.92);
+  background: #ffffff; /* Solid white background */
   border: 0;
   border-radius: var(--st-radius-sm, 8px);
 
-  box-shadow:
-    0 1px 2px rgba(0,0,0,0.04),
-    0 10px 24px rgba(0,0,0,0.06);
+  /* box-shadow removed per design spec */
 
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 
   text-align: center;
+
+  /* Maintain z-index to sit above grid background */
+  position: relative;
+  z-index: 10;
 }
 
 /* 5) Center the archive subtitle <p> even with max-width rules */
