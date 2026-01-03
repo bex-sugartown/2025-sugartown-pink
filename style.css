@@ -253,7 +253,8 @@ Rules
   /* Content container */
   --st-content-padding: var(--st-spacing-gutter);
 
-  --st-table-min-width: 900px;
+  --st-table-min-width: 1000px;
+  --st-table-max-width: 1400px;
 }
 
 
@@ -386,78 +387,6 @@ thead th {
 tbody tr:nth-child(odd) { background-color: #f9f9f9; }
 
 
-/* ==================================================
-   ST TABLE — Wide wrapper + Responsive row-cards
-   ================================================== */
-
-/* Wide tables: opt-in wrapper (prevents "vertical syllables") */
-.st-table-wrap {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: var(--st-radius-md, 12px);
-}
-
-/* Site-wide wide-table baseline (desktop/tablet) */
-.st-table-wrap > table {
-  min-width: var(--st-table-min-width);  /* adjust once site-wide */
-  margin: 0;
-}
-
-/* Table → row-cards on small screens (opt-in via .st-table--responsive) */
-@media (max-width: 860px) {
-  /* Card mode doesn't need horizontal scroll */
-  .st-table-wrap { overflow-x: visible; }
-
-  /* Ensure wrapper baseline doesn't force 900px cards */
-  .st-table-wrap > table.st-table--responsive {
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Hide header row */
-  table.st-table--responsive thead { display: none; }
-
-  /* Convert table structure to blocks */
-  table.st-table--responsive,
-  table.st-table--responsive tbody,
-  table.st-table--responsive tr,
-  table.st-table--responsive td {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box; /* fixes "cut off by a few pixels" */
-  }
-
-  /* Card container */
-  table.st-table--responsive tr {
-    margin: 0 0 var(--st-spacing-3, 14px);
-    padding: 14px 16px;
-    border: 1px solid var(--st-color-border-strong, rgba(0, 0, 0, 0.16));
-    border-radius: var(--st-radius-md, 12px);
-    background: var(--st-color-surface-primary, var(--st-color-surface, #fff));
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-  }
-
-  /* Card rows */
-  table.st-table--responsive td {
-    border: none;
-    padding: 8px 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  /* Optional: subtle dividers between fields inside card */
-  table.st-table--responsive td + td {
-    border-top: 1px solid var(--st-color-border-subtle, rgba(0, 0, 0, 0.08));
-    padding-top: 10px;
-  }
-}
-
-
-
 /* Buttons */
 button,
 input[type="submit"],
@@ -580,12 +509,84 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
    §04 COMPONENTS
    ================================================== */
 
+/* ==================================================
+   ST TABLE — Wide wrapper + Responsive row-cards
+   ================================================== */
+
+/* Wide tables: opt-in wrapper (prevents "vertical syllables") */
+.st-table-wrap {
+  max-width: var(--st-table-max-width);
+  margin: 0 auto;  /* Horizontal centering */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--st-radius-md, 12px);
+}
+
+/* Force minimum width on all wrapped tables */
+.st-table-wrap > table {
+  min-width: var(--st-table-min-width);
+  margin: 0;
+}
+
+/* Table → row-cards on small screens (opt-in via .st-table--responsive) */
+@media (max-width: 860px) {
+  /* Card mode doesn't need horizontal scroll */
+  .st-table-wrap { overflow-x: visible; }
+
+  /* Ensure wrapper baseline doesn't force 1000px cards */
+  .st-table-wrap > table.st-table--responsive {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Hide header row */
+  table.st-table--responsive thead { display: none; }
+
+  /* Convert table structure to blocks */
+  table.st-table--responsive,
+  table.st-table--responsive tbody,
+  table.st-table--responsive tr,
+  table.st-table--responsive td {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Card container */
+  table.st-table--responsive tr {
+    margin: 0 16px var(--st-spacing-3, 14px) 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--st-color-border-strong, rgba(0, 0, 0, 0.16));
+    border-radius: var(--st-radius-md, 12px);
+    background: var(--st-color-surface-primary, var(--st-color-surface, #fff));
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  /* Card rows */
+  table.st-table--responsive td {
+    border: none;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Optional: subtle dividers between fields inside card */
+  table.st-table--responsive td + td {
+    border-top: 1px solid var(--st-color-border-subtle, rgba(0, 0, 0, 0.08));
+    padding-top: 10px;
+  }
+}
+
+
 /* =========================================
-   ST TABLE — REVIEW (drop-in)
-   Scope: .st-table--review only
+   ST TABLE — WIDE (custom columns + styling)
+   Scope: .st-table--wide only
    ========================================= */
 
-.st-table--review {
+.st-table--wide {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed; /* critical: stops column chaos */
@@ -596,16 +597,16 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 }
 
 /* Column sizing (via colgroup) */
-.st-table--review col.col-thumb  { width: 110px; }
-.st-table--review col.col-ethics { width: 120px; }
-.st-table--review col.col-a11y   { width: 130px; }
-.st-table--review col.col-ip     { width: 170px; }
-.st-table--review col.col-alt    { width: 28%; }
-.st-table--review col.col-notes  { width: 28%; }
+.st-table--wide col.col-thumb  { width: 110px; }
+.st-table--wide col.col-ethics { width: 120px; }
+.st-table--wide col.col-a11y   { width: 130px; }
+.st-table--wide col.col-ip     { width: 170px; }
+.st-table--wide col.col-alt    { width: 28%; }
+.st-table--wide col.col-notes  { width: 28%; }
 
 /* Cells */
-.st-table--review th,
-.st-table--review td {
+.st-table--wide th,
+.st-table--wide td {
   padding: 14px 14px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
   vertical-align: top;
@@ -616,7 +617,7 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 }
 
 /* Header */
-.st-table--review thead th {
+.st-table--wide thead th {
   background: var(--st-color-accent);
   color: #fff;
   font-weight: 800;
@@ -628,29 +629,29 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 }
 
 /* Allow long headers to wrap if needed */
-.st-table--review thead th:nth-child(5),
-.st-table--review thead th:nth-child(6) {
+.st-table--wide thead th:nth-child(5),
+.st-table--wide thead th:nth-child(6) {
   white-space: normal;
 }
 
 /* Zebra */
-.st-table--review tbody tr:nth-child(odd) {
+.st-table--wide tbody tr:nth-child(odd) {
   background: #f9f9f9;
 }
 
 /* Thumbnail cell */
-.st-table--review td.st-table__thumb {
+.st-table--wide td.st-table__thumb {
   vertical-align: middle;
   text-align: center;
 }
 
-.st-table--review td.st-table__thumb a {
+.st-table--wide td.st-table__thumb a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.st-table--review td.st-table__thumb img {
+.st-table--wide td.st-table__thumb img {
   width: 72px;
   height: 72px;
   object-fit: cover;
@@ -660,83 +661,67 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 }
 
 /* Status columns: keep tidy */
-.st-table--review td.st-table__status {
+.st-table--wide td.st-table__status {
   white-space: nowrap;
   font-weight: 600;
 }
 
 /* Paragraph feel for long text columns */
-.st-table--review td:nth-child(5),
-.st-table--review td:nth-child(6) {
+.st-table--wide td:nth-child(5),
+.st-table--wide td:nth-child(6) {
   font-size: 0.95rem;
 }
 
 /* Optional: soften crowded look */
-.st-table--review tbody tr:hover {
+.st-table--wide tbody tr:hover {
   background: rgba(254, 18, 149, 0.04);
 }
 
-/* =========================================
-   MOBILE: convert rows to cards
-   ========================================= */
-
+/* Mobile: convert rows to cards */
 @media (max-width: 860px) {
-  .st-table--review {
+  .st-table--wide {
     box-shadow: none;
     background: transparent;
   }
 
-  .st-table--review thead {
+  .st-table--wide thead {
     display: none;
   }
 
-  .st-table--review,
-  .st-table--review tbody,
-  .st-table--review tr,
-  .st-table--review td {
+  .st-table--wide,
+  .st-table--wide tbody,
+  .st-table--wide tr,
+  .st-table--wide td {
     display: block;
     width: 100%;
   }
 
-  .st-table--review tr {
+  .st-table--wide tr {
     background: #fff;
-    border: 1px solid var(--st-color-gray-300);
+    border: 1px solid rgba(0,0,0,0.08);
     border-radius: var(--st-radius-md, 12px);
     padding: 14px 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     margin: 14px 0;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
-  @media (max-width: 860px) {
-  .st-table--review tr {
-    margin-block: var(--st-spacing-3, 14px);
-    margin-inline: var(--st-spacing-4, 16px);
-    padding-inline: var(--st-spacing-4, 16px);
-    box-sizing: border-box;
-  }
-}
-
-  .st-table--review td {
+  .st-table--wide td {
     border: none;
     padding: 8px 0;
   }
 
-  .st-table--review td.st-table__thumb {
+  .st-table--wide td.st-table__thumb {
     display: flex;
     justify-content: center;
     padding: 4px 0 12px 0;
   }
 
-  .st-table--review td.st-table__status {
+  .st-table--wide td.st-table__status {
     font-weight: 700;
   }
 
-  /* Give long text breathing room */
-  .st-table--review td:nth-child(5),
-  .st-table--review td:nth-child(6) {
+  .st-table--wide td:nth-child(5),
+  .st-table--wide td:nth-child(6) {
     padding-top: 10px;
   }
 }
