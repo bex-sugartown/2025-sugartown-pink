@@ -3,7 +3,7 @@ Theme Name: Sugartown Pink
 Theme URI: https://sugartown.io
 Author: Sugartown Digital
 Description: A minimalist theme for the Atomic Design System.
-Version: 3.3.3 (Restored Border + Fixed Citation)
+Version: 3.3.4 (implemented st-filter, Fixed z-index)
 */
 
 /*
@@ -285,7 +285,7 @@ blockquote, caption, figcaption, p {
   text-wrap: pretty;
 }
 
-p { max-width: 70ch; }
+p { max-width: 100%; }
 .more-link { display: block; }
 
 /* Links */
@@ -700,12 +700,24 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 
   .st-table--review tr {
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid var(--st-color-gray-300);
     border-radius: var(--st-radius-md, 12px);
     padding: 14px 16px;
-    margin: 14px 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin: 14px 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
+
+  @media (max-width: 860px) {
+  .st-table--review tr {
+    margin-block: var(--st-spacing-3, 14px);
+    margin-inline: var(--st-spacing-4, 16px);
+    padding-inline: var(--st-spacing-4, 16px);
+    box-sizing: border-box;
+  }
+}
 
   .st-table--review td {
     border: none;
@@ -1396,7 +1408,7 @@ main#primary.site-main {
    ================================================== */
 
 .gem-results-info {
-  max-width: 70ch;
+  max-width: 100%;
   margin: var(--st-spacing-4, 24px) auto;
   padding: 12px 16px;
 
@@ -1655,7 +1667,7 @@ body.page .wp-block-post-featured-image { aspect-ratio: 3 / 1; border-radius: 99
     font-size: 1.1rem;
     color: #666;
     font-style: italic;
-    max-width: 70ch;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -2296,7 +2308,7 @@ button.st-filter:hover {
 }
 
 /* Optional variants (future-proofing) */
-.st-callout--info   { background: #f2fbff; border-color: rgba(0, 140, 255, 0.25); }
+.st-callout--info   { background: var(--st-color-surface-secondary); border-color: var(--st-color-border-subtle); }
 .st-callout--tip    { background: #f3fff8; border-color: rgba(43, 212, 170, 0.35); }
 .st-callout--warn   { background: #fff9e6; border-color: rgba(255, 193, 7, 0.45); }
 .st-callout--danger { background: #fff1f2; border-color: rgba(220, 38, 38, 0.35); }
@@ -2757,7 +2769,7 @@ footer.wp-block-template-part {
 
 /* 4) Results bar: readable, "recessive", not a border-heavy pill */
 .gem-results-info {
-  max-width: 70ch;
+  max-width: 100%;
   margin: var(--st-spacing-4, 24px) auto;
   padding: 12px 16px;
 
