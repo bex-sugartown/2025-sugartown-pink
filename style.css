@@ -393,6 +393,32 @@ thead th a:hover{
 
 tbody tr:nth-child(odd) { background-color: #f9f9f9; }
 
+.st-doc-link {
+  margin-top: var(--st-spacing-stack-md);
+}
+
+.st-doc-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-family: var(--st-font-mono);
+  font-size: var(--st-font-size-sm);
+
+  padding: 0.6em 0.9em;
+  border-radius: var(--st-radius-sm);
+
+  background: var(--st-color-surface-secondary);
+  border: 1px solid var(--st-color-border-subtle);
+
+  color: var(--st-color-link);
+  text-decoration: none;
+}
+
+.st-doc-link a:hover {
+  background: var(--st-color-surface-tertiary);
+  text-decoration: underline;
+}
 
 /* Buttons */
 button,
