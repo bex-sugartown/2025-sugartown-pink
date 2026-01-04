@@ -382,7 +382,14 @@ thead th {
   letter-spacing: 0.06em;
   line-height: 1.2;
 }
-
+thead th a{
+  color: #ffffff;
+  text-decoration: underline;
+}
+thead th a:hover{
+  color: #ffffff;
+  text-decoration: none;
+}
 
 tbody tr:nth-child(odd) { background-color: #f9f9f9; }
 
@@ -596,13 +603,43 @@ table.st-table--responsive tr {
   background: #fff;
 }
 
-/* Column sizing (via colgroup) */
+/* DEPRECATE, DO NOT USE: Column sizing (via colgroup) */
 .st-table--wide col.col-thumb  { width: 110px; }
 .st-table--wide col.col-ethics { width: 120px; }
 .st-table--wide col.col-a11y   { width: 130px; }
 .st-table--wide col.col-ip     { width: 170px; }
 .st-table--wide col.col-alt    { width: 28%; }
 .st-table--wide col.col-notes  { width: 28%; }
+
+
+/* =================================================================
+   TABLE COLUMN WIDTH TOKENS
+   Design System: Sugartown Pink
+   Component: st-table
+   
+   Usage: Apply to <col> elements inside <colgroup> for ANY table.
+   Mobile: Auto-width in card view (responsive override)
+   ================================================================= */
+
+/* Fixed-width tokens (pixel-based) */
+.st-table col.st-col--xs { width: 60px; }   /* Icons, checkboxes, tiny badges */
+.st-table col.st-col--sm { width: 110px; }  /* Dates, short IDs, status */
+.st-table col.st-col--md { width: 150px; }  /* Medium text, categories */
+.st-table col.st-col--lg { width: 200px; }  /* Longer text, titles */
+.st-table col.st-col--xl { width: 250px; }  /* Descriptions, long content */
+
+/* Flexible-width tokens (percentage-based) */
+.st-table col.st-col--flex-sm { width: 20%; }
+.st-table col.st-col--flex-md { width: 30%; }
+.st-table col.st-col--flex-lg { width: 40%; }
+
+/* Responsive override: ignore column widths in card view */
+@media (max-width: 768px) {
+  .st-table col[class*="st-col--"] {
+    width: auto !important;
+  }
+}
+
 
 /* Cells */
 .st-table--wide th,
@@ -640,20 +677,21 @@ table.st-table--responsive tr {
 }
 
 /* Thumbnail cell */
-.st-table--wide td.st-table__thumb {
+.st-table td.st-table__thumb {
   vertical-align: middle;
   text-align: center;
 }
 
-.st-table--wide td.st-table__thumb a {
+.st-table td.st-table__thumb a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.st-table--wide td.st-table__thumb img {
-  width: 72px;
-  height: 72px;
+.st-table td.st-table__thumb img,
+.st-table td.st-table__thumb video {
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: var(--st-radius-md, 12px);
   display: block;
@@ -726,6 +764,8 @@ table.st-table--responsive tr {
     padding-top: 10px;
   }
 }
+
+
 
 /* ==========================================================================
    4. GEM ARCHIVE GRID - WRAPPER PATTERN
