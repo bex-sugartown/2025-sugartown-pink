@@ -2406,6 +2406,14 @@ footer .has-accent-5-background-color,
     background-color: #0d1226 !important;
 }
 
+/* Force vertical stacking of title and tagline */
+footer .has-accent-5-background-color > .wp-block-group:first-child {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: var(--wp--preset--spacing--10);
+}
+
 footer .has-accent-5-background-color h1,
 footer .has-accent-5-background-color .wp-block-site-title,
 footer .has-accent-5-background-color .wp-block-site-title a {
@@ -2417,12 +2425,17 @@ footer .has-accent-5-background-color .wp-block-site-title a {
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin: 0;
+    display: block;
+    width: 100%;
 }
 
 footer .has-accent-5-background-color .wp-block-site-tagline,
 footer .has-accent-5-background-color p {
     color: #fbd4f0 !important;
     text-align: center;
+    display: block;
+    width: 100%;
+    margin: 0;
 }
 
 footer .has-accent-5-background-color a {
