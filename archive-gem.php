@@ -395,4 +395,10 @@ function gem_archive_url($param_name, $param_value) {
     <?php endif; ?>
 </div>
 
-<?php get_footer(); ?>
+<?php
+// Use the same footer as single-gem.html (block 924 - dark footer)
+echo do_blocks('<!-- wp:block {"ref":924} /-->');
+wp_footer();
+?>
+</body>
+</html>
