@@ -395,10 +395,13 @@ function gem_archive_url($param_name, $param_value) {
     <?php endif; ?>
 </div>
 
+<footer>
 <?php
 // Use standard dark footer pattern
 echo do_blocks('<!-- wp:pattern {"slug":"sugartown-pink/footer-standard"} /-->');
-wp_footer();
 ?>
+</footer>
+
+<?php wp_footer(); ?>
 </body>
 </html>
