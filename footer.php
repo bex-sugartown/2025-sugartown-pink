@@ -2,8 +2,8 @@
 ?></main>
 
 <?php
-// Render the Site Editor Template Part "Footer-Centered"
-echo do_blocks('<!-- wp:template-part {"slug":"footer-centered","tagName":"footer"} /-->');
+// Render standard dark footer pattern
+echo do_blocks('<!-- wp:pattern {"slug":"sugartown-pink/footer-standard"} /-->');
 ?>
 
 <?php wp_footer(); ?>

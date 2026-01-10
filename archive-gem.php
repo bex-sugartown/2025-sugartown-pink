@@ -396,8 +396,8 @@ function gem_archive_url($param_name, $param_value) {
 </div>
 
 <?php
-// Use the same footer as single-gem.html (block 924 - dark footer)
-echo do_blocks('<!-- wp:block {"ref":924} /-->');
+// Use standard dark footer pattern
+echo do_blocks('<!-- wp:pattern {"slug":"sugartown-pink/footer-standard"} /-->');
 wp_footer();
 ?>
 </body>
