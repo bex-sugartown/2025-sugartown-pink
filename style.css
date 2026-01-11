@@ -173,14 +173,14 @@ Rules
 
   /* Accent (legacy + common) */
   --st-color-accent: var(--st-color-brand-primary);
-  --st-color-accent-soft: rgba(254, 18, 149, 0.08);
+  --st-color-accent-soft: rgba(255, 36, 125, 0.08);
 
   /* Text */
-  --st-color-text: #1e1e1e; /* keep as-is (matches current rendering) */
+  --st-color-text: var(--st-color-black); 
   --st-color-text-primary: var(--st-color-text);
   --st-color-text-secondary: var(--st-color-gray-600);
   --st-color-text-muted: var(--st-color-gray-400);
-  --st-color-muted: #666; /* legacy alias used in some rules */
+  --st-color-muted: #94A3B8; /* legacy alias used in some rules */
 
   /* Surfaces */
   --st-color-surface: var(--st-color-white);
@@ -237,7 +237,7 @@ Rules
   --st-font-heading-4: var(--st-font-size-lg);
 
   /* Shadow alias used by components */
-  --st-shadow-card: 0 4px 12px rgba(254, 18, 149, 0.05);
+  --st-shadow-card: 0 4px 12px rgba(255, 36, 125, 0.05);
 
   /* ==========================================
      TIER 3: COMPONENT TOKENS (Optional)
@@ -445,7 +445,7 @@ button:hover,
 .button:hover,
 input[type="submit"]:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(254, 18, 149, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 36, 125, 0.3);
 }
 
 /* Blockquote / rules */
@@ -511,8 +511,8 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
   padding: 0.45em 0.75em;
   border-radius: var(--st-radius-xs, 4px);
 
-  background: rgba(254, 18, 149, 0.08);
-  border: 1px solid rgba(254, 18, 149, 0.35);
+  background: rgba(255, 36, 125, 0.08);
+  border: 1px solid rgba(255, 36, 125, 0.35);
   color: var(--st-color-accent, #ff247d) !important;
 
   text-decoration: none !important;
@@ -521,9 +521,9 @@ body.single-gem .wp-block-post-content > .wp-block-post-terms {
 
 :where(.wp-block-post-terms a:hover, .wp-block-tag-cloud a:hover) {
   transform: translateY(-1px);
-  background: rgba(254, 18, 149, 0.15);
+  background: rgba(255, 36, 125, 0.15);
   border-color: var(--st-color-accent, #ff247d);
-  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 2px 5px rgba(255, 36, 125, 0.15);
 }
 
 /* Ensure the WP containers lay out like chip rows */
@@ -738,7 +738,7 @@ table.st-table--responsive tr {
 
 /* Optional: soften crowded look */
 .st-table--wide tbody tr:hover {
-  background: rgba(254, 18, 149, 0.04);
+  background: rgba(255, 36, 125, 0.04);
 }
 
 /* Mobile: convert rows to cards */
@@ -948,7 +948,7 @@ table.st-table--responsive tr {
 
 .st-card:hover{
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 12px 40px rgba(255, 36, 125, 0.15);
 }
 
 /* Optional: tighter card */
@@ -1120,7 +1120,7 @@ sup{
 .st-card__footer::before{
   content: "";
   display: block;
-  border-top: 1px dashed rgba(254, 18, 149, 0.35);
+  border-top: 1px dashed rgba(255, 36, 125, 0.35);
   margin-bottom: 12px;
 }
 
@@ -1349,7 +1349,7 @@ cite a:hover{
   transform: translateY(-4px);
   box-shadow:
     0 18px 55px rgba(0,0,0,0.22),
-    0 0 0 1px rgba(254, 18, 149, 0.28);
+    0 0 0 1px rgba(255, 36, 125, 0.28);
 }
 
 /* Typography */
@@ -1595,7 +1595,7 @@ main#primary.site-main {
 .no-gems-message .button:hover {
     background: #E5007D;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(254, 18, 149, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 36, 125, 0.3);
 }
 
 /* Responsive adjustments */
@@ -1850,8 +1850,8 @@ a.st-chip {
   padding: 0.45em 0.75em;
   border-radius: var(--st-radius-xs, 4px);
 
-  background: rgba(254, 18, 149, 0.08);
-  border: 1px solid rgba(254, 18, 149, 0.35);
+  background: rgba(255, 36, 125, 0.08);
+  border: 1px solid rgba(255, 36, 125, 0.35);
   color: var(--st-color-accent, #ff247d);
 
   cursor: pointer;
@@ -1866,9 +1866,9 @@ a.st-chip {
 .st-chip:hover,
 a.st-chip:hover {
   transform: translateY(-1px);
-  background: rgba(254, 18, 149, 0.15);
+  background: rgba(255, 36, 125, 0.15);
   border-color: var(--st-color-accent, #ff247d);
-  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 2px 5px rgba(255, 36, 125, 0.15);
 }
 
 .st-chip.is-active,
@@ -1876,7 +1876,7 @@ a.st-chip:hover {
   background: var(--st-color-accent, #ff247d);
   border-color: var(--st-color-accent, #ff247d);
   color: #fff;
-  box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 36, 125, 0.2);
 }
 
 /* ==========================================================================
@@ -1901,7 +1901,7 @@ button.st-filter {
   border-radius: var(--st-radius-xs, 4px);
 
   background: rgba(#ff247d, 0.08);
-  border: 1px solid rgba(254, 18, 149, 0.35);
+  border: 1px solid rgba(255, 36, 125, 0.35);
   color: var(--st-color-accent, #ff247d);
 
   cursor: pointer;
@@ -1916,9 +1916,9 @@ button.st-filter {
 a.st-filter:hover,
 button.st-filter:hover {
   transform: translateY(-1px);
-  background: rgba(254, 18, 149, 0.15);
+  background: rgba(255, 36, 125, 0.15);
   border-color: var(--st-color-accent, #ff247d);
-  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 2px 5px rgba(255, 36, 125, 0.15);
 }
 
 .st-filter.is-active,
@@ -1968,8 +1968,8 @@ button.st-filter:hover {
   padding: 0.45em 0.75em;
   border-radius: var(--st-radius-xs, 4px);
 
-  background: rgba(254, 18, 149, 0.08);
-  border: 1px solid rgba(254, 18, 149, 0.35);
+  background: rgba(255, 36, 125, 0.08);
+  border: 1px solid rgba(255, 36, 125, 0.35);
   color: var(--st-color-accent, #ff247d);
 
   text-decoration: none !important;
@@ -1978,9 +1978,9 @@ button.st-filter:hover {
 
 :where(.st-card__tag:hover, .st-tag:hover, .pink-card__tag:hover, .skill-tag:hover) {
   transform: translateY(-1px);
-  background: rgba(254, 18, 149, 0.15);
+  background: rgba(255, 36, 125, 0.15);
   border-color: var(--st-color-accent, #ff247d);
-  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 2px 5px rgba(255, 36, 125, 0.15);
 }
 
 
@@ -2010,8 +2010,8 @@ button.st-filter:hover {
   padding: 0.45em 0.75em;
   border-radius: var(--st-radius-xs, 4px);
 
-  background: rgba(254, 18, 149, 0.08);
-  border: 1px solid rgba(254, 18, 149, 0.35);
+  background: rgba(255, 36, 125, 0.08);
+  border: 1px solid rgba(255, 36, 125, 0.35);
   color: var(--st-color-accent, #ff247d);
 
   cursor: pointer;
@@ -2022,9 +2022,9 @@ button.st-filter:hover {
 
 .st-filter__toggle:hover {
   transform: translateY(-1px);
-  background: rgba(254, 18, 149, 0.15);
+  background: rgba(255, 36, 125, 0.15);
   border-color: var(--st-color-accent, #ff247d);
-  box-shadow: 0 2px 5px rgba(254, 18, 149, 0.15);
+  box-shadow: 0 2px 5px rgba(255, 36, 125, 0.15);
 }
 
 .st-filter__toggle:focus {
@@ -2037,7 +2037,7 @@ button.st-filter:hover {
   background: var(--st-color-accent, #ff247d);
   border-color: var(--st-color-accent, #ff247d);
   color: #fff;
-  box-shadow: 0 0 0 2px rgba(254, 18, 149, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 36, 125, 0.2);
 }
 
 /* Toggle Icon (Chevron) */
@@ -2122,14 +2122,14 @@ button.st-filter:hover {
 }
 
 .st-filter__item a:hover {
-  background: rgba(254, 18, 149, 0.06);
-  color: #ff247d;
+  background: rgba(255, 36, 125, 0.06);
+  color: var(--st-color-accent, #ff247d);
 }
 
 .st-filter__item a:focus {
   outline: 2px solid var(--st-color-accent, #ff247d);
   outline-offset: -2px;
-  background: rgba(254, 18, 149, 0.06);
+  background: rgba(255, 36, 125, 0.06);
 }
 
 /* Round corners on first and last items to match menu border-radius */
@@ -2247,11 +2247,11 @@ button.st-filter:hover {
     z-index: 9999; /* Float OVER everything */
     
     background: #fff;
-    border: 1px solid rgba(254, 18, 149, 0.25);
+    border: 1px solid rgba(255, 36, 125, 0.25);
     border-radius: 8px;
     box-shadow: 
         0 4px 12px rgba(0,0,0,0.08),
-        0 12px 32px rgba(254, 18, 149, 0.12); /* Pink-tinted deep shadow */
+        0 12px 32px rgba(255, 36, 125, 0.12); /* Pink-tinted deep shadow */
     
     min-width: 240px;
     padding: 8px 0;
@@ -2417,7 +2417,7 @@ footer .has-accent-5-background-color > .wp-block-group:first-child {
 footer .has-accent-5-background-color h1,
 footer .has-accent-5-background-color .wp-block-site-title,
 footer .has-accent-5-background-color .wp-block-site-title a {
-    color: #ff247d !important;
+    color: var(--st-color-white) !important;
     text-align: center;
     font-family: var(--wp--preset--font-family--playfair-display-sc), serif !important;
     font-size: 2rem;
@@ -2554,7 +2554,7 @@ footer .has-accent-5-background-color .wp-block-navigation {
 
 .pink-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(254, 18, 149, 0.15);
+    box-shadow: 0 12px 40px rgba(255, 36, 125, 0.15);
 }
 
 /* 5.2 TEXTURE */
@@ -2631,7 +2631,7 @@ footer .has-accent-5-background-color .wp-block-navigation {
     font-family: 'Menlo', 'Monaco', monospace;
     font-size: 0.7rem;
     color: #888;
-    border-top: 1px dashed rgba(254, 18, 149, 0.3);
+    border-top: 1px dashed rgba(255, 36, 125, 0.3);
     font-style: normal;
 }
 .pink-card__citation a {

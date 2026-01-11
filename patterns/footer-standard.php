@@ -7,8 +7,8 @@
  * Description: Standard dark footer with site title, tagline, navigation and copyright
  */
 ?>
-<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"elements":{"link":{"color":{"text":"#fbd4f0"}}},"color":{"text":"#fbd4f0"}},"backgroundColor":"accent-5","layout":{"type":"constrained"}} -->
-<div class="wp-block-group has-accent-5-background-color has-text-color has-background has-link-color" style="color:#fbd4f0;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"elements":{"link":{"color":{"text":"#94A3B8"}}},"color":{"text":"#94A3B8"}},"backgroundColor":"accent-5","layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-accent-5-background-color has-text-color has-background has-link-color" style="color:#94A3B8;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 
   <!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|10"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
   <div class="wp-block-group">
